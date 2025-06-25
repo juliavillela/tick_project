@@ -1,5 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Index</h1>
+<h3 class="mt-3">Today</h3>
+<div class="row">
+    <div class="column">
+        focused for
+    </div>
+    <div class="column">
+        
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        {{today_time}}
+    </div>
+    <div class="column">
+        
+    </div>
+</div>
+
+<hr>
+<h3 class="mt-3">Tasks</h3> <a>see all</a>
+<div class="card">
+    <ul class="list-group list-group-flush">
+    {% for task in tasks %}
+    <li class="list-group-item">{{task.name}} ({{task.total_time_spent}})</li>
+    {% endfor %}
+    </ul>
+</div>
+<hr>
+<h3 class="mt-3">Projects</h3> <a>see all</a>
+<div class="card">
+    <ul class="list-group list-group-flush">
+    {% for project in projects %}
+    <li class="list-group-item">{{project.name}} ({{project.total_time_spent}})</li>
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}
