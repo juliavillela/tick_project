@@ -40,6 +40,12 @@ class Session(models.Model):
     def __str__(self):
         return f"{self.task}({self.start_time})"
     
+    def set_start_time(self):
+        self.start_time = timezone.now()
+
+    def set_end_time(self):
+        self.end_time = timezone.now()
+
     @property
     def duration(self):
         return self.end_time - self.start_time
