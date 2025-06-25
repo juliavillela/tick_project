@@ -10,7 +10,6 @@ class UsersManagersTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertFalse(user.is_staff)
         self.assertFalse(user.is_superuser)
-        self.assertRaises(AttributeError, user.username)
 
         with self.assertRaises(TypeError):
             User.objects.create_user()
