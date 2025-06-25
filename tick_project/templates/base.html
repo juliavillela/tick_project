@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Tick{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<header>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'tracker:index' %}">t i c k</a>
+          {% if request.user.is_authenticated%}
+          <a href="{% url 'users:logout' %}">logout</a>
+          {% else %}
+          <a href="{% url 'users:login' %}">login</a>
+          {% endif %}
+        </div>
+      </nav>
+</header>
+
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<main class="container">
+    {% block content %}
+    <!-- Page-specific content will go here -->
+    {% endblock %}
+</main>
+
+<footer>
+    <p>&copy; {{ now|date:"Y" }} Tick — Time well spent.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="mt-3">register</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" name="password">
+      <div id="passwordHelp" class="form-text">your password must have at least 8 characters including numbers and letters.</div>
+    </div>
+    <div class="mb-3">
+        <label for="password-confirmation" class="form-label">Password confirmation</label>
+        <input type="password" class="form-control" id="password-confirmation" name="password-confirmation">
+    </div>
+    <div> already have an account? <a href="{% url 'users:login' %}">login</a></div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+{% endblock %}
