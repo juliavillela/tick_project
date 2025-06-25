@@ -28,14 +28,14 @@ class ProjectModelTests(TestCase):
         project = Project.objects.create(user=self.user, name="Colored Project", color="#FF0000")
         self.assertEqual(project.color, "#FF0000")
 
-    def test_total_time_spent(self):
+    def test_total_seconds_spent(self):
         project = Project.objects.create(user=self.user, name="My Project")
 
         # Create two tasks in the project
         task1 = Task.objects.create(project=project, name="Task 1")
         task2 = Task.objects.create(project=project, name="Task 2")
         
-        # Mock total_time_spent for tasks by creating sessions with known durations
+        # Mock total_seconds_spent for tasks by creating sessions with known durations
         start = timezone.now() 
         end = start + timedelta(seconds=30)
         session_1 = Session.objects.create(task=task1, start_time=start, end_time=end)
@@ -44,7 +44,7 @@ class ProjectModelTests(TestCase):
         end = end + timedelta(seconds=30)
         session_2 = Session.objects.create(task=task2, start_time=start, end_time=end)
 
-        self.assertEqual(project.total_time_spent(), 60)
+        self.assertEqual(project.total_seconds_spent(), 60)
 
 class TaskModelTests(TestCase):
     def setUp(self):
@@ -63,7 +63,7 @@ class TaskModelTests(TestCase):
         task = Task.objects.create(project=self.project, name="Test Task")
         self.assertEqual(f"{task.name} - {self.project}", task.__str__())
 
-    def test_total_time_spent(self):
+    def test_total_seconds_spent(self):
         task = Task.objects.create(project=self.project, name="Test Task")
 
         start = timezone.now() 
@@ -74,7 +74,7 @@ class TaskModelTests(TestCase):
         end = end + timedelta(seconds=30)
         session_2 = Session.objects.create(task=task, start_time=start, end_time=end)
 
-        self.assertEqual(task.total_time_spent(), 60)
+        self.assertEqual(task.total_seconds_spent(), 60)
 
 
 class SessionModelTests(TestCase):

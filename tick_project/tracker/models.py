@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.db import models
 from django.utils import timezone
 
@@ -13,9 +14,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.name
-
+    
     def total_time_spent(self):
-        total_seconds = sum(task.total_time_spent() for task in self.tasks.all())
+        return timedelta(seconds=self.total_seconds_spent())
+
+    def total_seconds_spent(self):
+        total_seconds = sum(task.total_seconds_spent() for task in self.tasks.all())
         return total_seconds
     
 class Task(models.Model):
@@ -29,6 +33,9 @@ class Task(models.Model):
         return f"{self.name} - {self.project}"
 
     def total_time_spent(self):
+        return timedelta(seconds=self.total_seconds_spent())
+
+    def total_seconds_spent(self):
         total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
         return total_seconds
 
