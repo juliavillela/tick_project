@@ -1,3 +1,4 @@
+from time
 from django.db import models
 from django.utils import timezone
 
@@ -29,7 +30,7 @@ class Task(models.Model):
         return f"{self.name} - {self.project}"
 
     def total_time_spent(self):
-        total_seconds = sum(session.duration for session in self.sessions.all())
+        total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
         return total_seconds
 
 class Session(models.Model):
@@ -46,6 +47,8 @@ class Session(models.Model):
     def set_end_time(self):
         self.end_time = timezone.now()
 
-    @property
-    def duration(self):
-        return self.end_time - self.start_time
+    def duration_in_seconds(self):
+        if self.start_time is None or self.end_time is None:
+            raise TypeError("Cannot calculate duration for a Session with missing timestamp")
+        duration = self.end_time - self.start_time
+        return duration.total_seconds()
