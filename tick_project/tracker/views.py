@@ -23,3 +23,14 @@ def index(request):
     context["today_time"] = timedelta(seconds=today_time)
     context ["today_tasks"] = len(today_tasks)
     return render(request, template, context)
+
+def task_list(request):
+    pending_tasks = Task.objects.filter(
+        project__user=request.user,
+        is_done=False  # or False for pending tasks
+    ).order_by('-last_edited')  # newest edited first
+    
+    context = {
+        "pending_tasks": pending_tasks
+    }
+    return render(request, "task_list.html", context)
