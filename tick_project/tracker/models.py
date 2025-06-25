@@ -15,7 +15,7 @@ class Project(models.Model):
         return self.name
 
     def total_time_spent(self):
-        total_seconds = sum(task.total_time_spent() for task in self.tasks)
+        total_seconds = sum(task.total_time_spent() for task in self.tasks.all())
         return total_seconds
     
 class Task(models.Model):
