@@ -58,6 +58,7 @@ class TaskModelTests(TestCase):
         self.assertFalse(task.is_done)
         self.assertIsNotNone(task.created_at)
         self.assertIsNotNone(task.last_edited)
+        self.assertIsNone(task.done_at)
 
     def test_task_str(self):
         task = Task.objects.create(project=self.project, name="Test Task")
@@ -76,6 +77,12 @@ class TaskModelTests(TestCase):
 
         self.assertEqual(task.total_seconds_spent(), 60)
 
+    def test_mark_as_done(self):
+        task = Task.objects.create(project=self.project, name="Test Task")
+
+        task.mark_as_done()
+        self.assertTrue(task.is_done)
+        self.assertIsNotNone(task.done_at)
 
 class SessionModelTests(TestCase):
     def setUp(self):
