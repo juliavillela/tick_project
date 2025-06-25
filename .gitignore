@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment folder
+.venv/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+db.sqlite3
+
+# macOS
+.DS_Store
