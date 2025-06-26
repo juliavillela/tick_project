@@ -46,7 +46,8 @@ def task_create(request):
     else:
         template = "task_form.html"
         context = {
-            "form": TaskForm(user=request.user)
+            "form": TaskForm(user=request.user),
+            "referer": request.META.get("HTTP_REFERER", None)
         }
         return render(request,template, context)
     
@@ -62,6 +63,7 @@ def task_detail(request, pk):
 
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk, project__user=request.user)
+
     if request.method == "POST":
         form = TaskForm(request.POST, user=request.user, instance=task)
         if form.is_valid():
@@ -70,6 +72,7 @@ def task_update(request, pk):
     else:
         template = "task_form.html"
         context = {
-            "form": TaskForm(user=request.user, instance=task)
+            "form": TaskForm(user=request.user, instance=task),
+            "referer": request.META.get("HTTP_REFERER", None)
         }
         return render(request,template, context)
