@@ -76,3 +76,18 @@ def task_update(request, pk):
             "referer": request.META.get("HTTP_REFERER", None)
         }
         return render(request,template, context)
+    
+def task_delete(request, pk):
+    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    referer = request.META.get("HTTP_REFERER", None)
+
+    if request.method == "POST":
+        task.delete()
+        return redirect("tracker:tasks")
+    else:    
+        template = "task_delete_form.html"
+        context = {
+            "task":task,
+            "referer": referer
+        }
+        return render(request, template, context)
