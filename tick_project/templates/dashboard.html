@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3 class="mt-3 text-center">Today</h3>
+<div class="row">
+    <div class="col text-center">
+        focused for
+    </div>
+    <div class="col text-center">
+        tasks
+    </div>
+</div>
+<div class="row">
+    <div class="col text-center">
+        {{today_time}}
+    </div>
+    <div class="col text-center">
+        {{today_tasks}}
+    </div>
+</div>
+
+<hr>
+<h3 class="mt-3">Tasks</h3> <a href="{% url 'tracker:tasks' %}">see all</a>
+<div class="card">
+    <ul class="list-group list-group-flush">
+    {% for task in tasks %}
+    <li class="list-group-item">{{task.name}} ({{task.total_time_spent}})</li>
+    {% endfor %}
+    </ul>
+</div>
+<hr>
+<h3 class="mt-3">Projects</h3> <a>see all</a>
+<div class="card">
+    <ul class="list-group list-group-flush">
+    {% for project in projects %}
+    <li class="list-group-item">{{project.name}} ({{project.total_time_spent}})</li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

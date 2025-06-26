@@ -6,9 +6,13 @@ from django.contrib.auth.decorators import login_required
 from .models import Task, Project
 from .forms import TaskForm
 
-@login_required
 def index(request):
     template = "index.html"
+    return render(request, template)
+
+@login_required
+def dashboard(request):
+    template = "dashboard.html"
     context = {}
     tasks = Task.objects.filter(project__user=request.user).order_by('-last_edited')
     context["tasks"] = tasks[:5]
