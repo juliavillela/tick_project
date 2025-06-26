@@ -28,7 +28,7 @@
 <div class="card">
     <ul class="list-group list-group-flush">
     {% for session in sessions %}
-    <li class="list-group-item">{{ session.start_time }} → {{ session.end_time.time }} duration:({{session.duration_in_seconds}})</li>
+    <li class="list-group-item">{{ session.start_time }} → {{ session.end_time.time }} duration:({{session.duration}})</li>
     {% empty %}
     <li class="list-group-item">No sessions yet.</li>
     {% endfor %}

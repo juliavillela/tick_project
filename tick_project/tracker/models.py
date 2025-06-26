@@ -63,3 +63,6 @@ class Session(models.Model):
             raise TypeError("Cannot calculate duration for a Session with missing timestamp")
         duration = self.end_time - self.start_time
         return duration.total_seconds()
+    
+    def duration(self):
+        return timedelta(seconds=self.duration_in_seconds())
