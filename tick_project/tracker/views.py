@@ -59,3 +59,17 @@ def task_detail(request, pk):
         "session_count": len(sessions)
     }
     return render(request, "task_detail.html", context)
+
+def task_update(request, pk):
+    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    if request.method == "POST":
+        form = TaskForm(request.POST, user=request.user, instance=task)
+        if form.is_valid():
+            task = form.save()
+            return redirect("tracker:task-detail", pk=task.pk)
+    else:
+        template = "task_form.html"
+        context = {
+            "form": TaskForm(user=request.user, instance=task)
+        }
+        return render(request,template, context)
