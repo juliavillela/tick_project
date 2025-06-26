@@ -8,7 +8,7 @@
 <div class="card">
     <ul class="list-group list-group-flush">
     {% for task in pending_tasks %}
-    <li class="list-group-item">{{task.name}} ({{task.total_time_spent}})</li>
+    <li class="list-group-item"><a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>({{task.total_time_spent}})</li>
     {% endfor %}
     </ul>
 </div>

@@ -1,5 +1,5 @@
 from datetime import timedelta
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 
 from .models import Task, Project
@@ -50,4 +50,12 @@ def create_task(request):
         }
         return render(request,template, context)
     
-
+def task_detail(request, pk):
+    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    sessions = task.sessions.all().order_by("-start_time")
+    context = {
+        "task": task,
+        "sessions": sessions,
+        "session_count": len(sessions)
+    }
+    return render(request, "task_detail.html", context)
