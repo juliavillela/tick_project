@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login, get_user_model
 from django.shortcuts import redirect
 
-login_redirect = 'tracker:index'
+login_redirect = 'tracker:dashboard'
 User = get_user_model()
 
 def register(request):
