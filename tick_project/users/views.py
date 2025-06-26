@@ -20,7 +20,7 @@ def register(request):
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email is already registered.")
             return render(request, template)
-        user = User.objects.create(email=email, password=password)
+        user = User.objects.create_user(email=email, password=password)
         login(request,user)
         return redirect(login_redirect)
         
@@ -28,6 +28,7 @@ def register(request):
         return render(request, template)
 
 def login_view(request):
+    template = "login.html"
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -35,9 +36,10 @@ def login_view(request):
         if user is not None:
             login(request, user)
             return redirect(login_redirect)
-        
+        else:
+            messages.error(request, "Invalid email or password.")
+            return render(request, template)
     else:
-        template = "login.html"
         return render(request, template)
 
 def logout_view(request):
