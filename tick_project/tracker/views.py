@@ -37,7 +37,7 @@ def task_list(request):
     }
     return render(request, "task_list.html", context)
 
-def create_task(request):
+def task_create(request):
     if request.method == "POST":
         form = TaskForm(request.POST, user=request.user)
         if form.is_valid():
