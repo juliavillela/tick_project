@@ -102,3 +102,12 @@ def task_delete(request, pk):
             "referer": referer
         }
         return render(request, template, context)
+    
+@login_required
+def track(request, pk):
+    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    template = "track.html"
+    context = {
+        "task": task
+    }
+    return render(request, template, context)

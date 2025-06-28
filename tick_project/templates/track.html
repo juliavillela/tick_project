@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>{{ task.name }}</h3>
+<div id="timer">00:00</div>
+
+<div>
+    <button id="start-btn" class="btn btn-primary" type="submit">start</button>
+</div>
+
+<form method="post" style="display: none;">
+  {% csrf_token %}
+  <input type="hidden" name="session_id" value="{{session.id}}">
+  <button class="btn btn-primary" type="submit">stop</button>
+</form>
+
+{% endblock %}
