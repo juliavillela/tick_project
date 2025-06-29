@@ -60,7 +60,7 @@ class Session(models.Model):
 
     def duration_in_seconds(self):
         if self.start_time is None or self.end_time is None:
-            raise TypeError("Cannot calculate duration for a Session with missing timestamp")
+            return 0
         duration = self.end_time - self.start_time
         return duration.total_seconds()
     

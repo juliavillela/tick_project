@@ -113,7 +113,6 @@ class SessionModelTests(TestCase):
         session = Session.objects.create(task=self.task, start_time=start, end_time=end)
         self.assertEqual(session.duration_in_seconds(), 30)
 
-        #raise error if one of the timestamps are missing
+        #return 0 if one of the timestamps are missing
         session.end_time = None
-        with self.assertRaises(TypeError):
-            session.duration_in_seconds()
+        self.assertEqual(session.duration_in_seconds(), 0)
