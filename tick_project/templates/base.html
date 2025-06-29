@@ -14,11 +14,20 @@
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
           {% if request.user.is_authenticated%}
-          <a class="navbar-brand" href="{% url 'tracker:dashboard' %}">t i c k</a>
-          <a href="{% url 'users:logout' %}">logout</a>
+              {% if current_session %}
+                <a class="navbar-brand" href="{% url 'tracker:session-active' pk=current_session.pk %}">
+                  t i c k 
+                  <span id="timer" data-start-time="{{ current_session.start_time|date:'c' }}">
+                    00:00:00
+                  </span>
+                </a>
+              {% else %}
+                <a class="navbar-brand" href="{% url 'tracker:dashboard' %}">t i c k</a>
+              {% endif %}
+            <a href="{% url 'users:logout' %}">logout</a>
           {% else %}
-          <a class="navbar-brand" href="{% url 'tracker:index' %}">t i c k</a>
-          <a href="{% url 'users:login' %}">login</a>
+            <a class="navbar-brand" href="{% url 'tracker:index' %}">t i c k</a>
+            <a href="{% url 'users:login' %}">login</a>
           {% endif %}
         </div>
       </nav>
@@ -39,6 +48,7 @@
 </main>
 
 {% block script %}
+<script src="{% static 'js/track.js' %}" defer></script>
 {% endblock %}
 
 </body>
