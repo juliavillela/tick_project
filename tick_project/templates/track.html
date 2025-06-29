@@ -3,7 +3,7 @@
 {% block content %}
 
 <h3>{{ task.name }}</h3>
-<div id="timer" data-start-time="{{ session.start_time|date:'c' }}">00:00</div>
+<div id="timer" data-start-time="{{ session.start_time|date:'c' }}">00:00:00</div>
 
 {% if session %}
   <form method="post">
