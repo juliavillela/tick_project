@@ -1,17 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 <h3>{{ task.name }}</h3>
-<div id="timer">00:00</div>
+<div id="timer" data-start-time="{{ session.start_time|date:'c' }}">00:00</div>
 
-<div>
-    <button id="start-btn" class="btn btn-primary" type="submit">start</button>
-</div>
+{% if session %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="task_id" value="{{task.id}}">
+    <button class="btn btn-primary" type="submit">stop</button>
+  </form>
+{% else %}
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="session_id" value="{{session.id}}">
+    <button class="btn btn-primary" type="submit">start</button>
+  </form>
+{% endif %}
 
-<form method="post" style="display: none;">
-  {% csrf_token %}
-  <input type="hidden" name="session_id" value="{{session.id}}">
-  <button class="btn btn-primary" type="submit">stop</button>
-</form>
+{% endblock %}
 
+{% block script %}
+{% load static %}
+<script src="{% static 'js/track.js' %}"></script>
 {% endblock %}
