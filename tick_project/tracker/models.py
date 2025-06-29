@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 
 from django.conf import settings
+
+from .helpers import timedelta_to_dict
 # Create your models here.
 
 class Project(models.Model):
@@ -15,8 +17,8 @@ class Project(models.Model):
     def __str__(self):
         return self.name
     
-    def total_time_spent(self):
-        return timedelta(seconds=self.total_seconds_spent())
+    def total_time_spent_dict(self):
+        return timedelta_to_dict(timedelta(seconds=self.total_seconds_spent()))
 
     def total_seconds_spent(self):
         total_seconds = sum(task.total_seconds_spent() for task in self.tasks.all())
@@ -41,8 +43,8 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.name} - {self.project}"
 
-    def total_time_spent(self):
-        return timedelta(seconds=self.total_seconds_spent())
+    def total_time_spent_dict(self):
+        return timedelta_to_dict(timedelta(seconds=self.total_seconds_spent()))
 
     def total_seconds_spent(self):
         total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
@@ -73,5 +75,5 @@ class Session(models.Model):
         duration = self.end_time - self.start_time
         return duration.total_seconds()
     
-    def duration(self):
-        return timedelta(seconds=self.duration_in_seconds())
+    def duration_dict(self):
+        return timedelta_to_dict(timedelta(seconds=self.duration_in_seconds()))
