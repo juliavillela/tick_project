@@ -8,7 +8,27 @@
 <div class="card">
     <ul class="list-group list-group-flush">
     {% for task in pending_tasks %}
-    <li class="list-group-item"><a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>({{task.total_time_spent}})</li>
+    <li class="list-group-item">
+        <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
+        <strong>
+            {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+        </strong>
+    </li>
+    {% endfor %}
+    </ul>
+</div>
+
+<hr>
+<h3>done</h3>
+<div class="card">
+    <ul class="list-group list-group-flush">
+    {% for task in done_tasks %}
+    <li class="list-group-item">
+        <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
+        <strong>
+            {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+        </strong>
+    </li>
     {% endfor %}
     </ul>
 </div>

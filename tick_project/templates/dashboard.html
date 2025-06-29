@@ -12,10 +12,14 @@
 </div>
 <div class="row">
     <div class="col text-center">
-        {{today_time}}
+        <strong>
+            {{today_time.hours|stringformat:"02d"}}:{{today_time.minutes|stringformat:"02d"}}
+        </strong>
     </div>
     <div class="col text-center">
-        {{today_tasks}}
+        <strong>
+            {{today_tasks}}
+        </strong>
     </div>
 </div>
 
@@ -24,7 +28,12 @@
 <div class="card">
     <ul class="list-group list-group-flush">
     {% for task in tasks %}
-    <li class="list-group-item">{{task.name}} ({{task.total_time_spent}})</li>
+    <li class="list-group-item">
+        {{task.name}}
+        <strong>
+            {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+        </strong>
+    </li>
     {% endfor %}
     </ul>
 </div>
@@ -33,7 +42,12 @@
 <div class="card">
     <ul class="list-group list-group-flush">
     {% for project in projects %}
-    <li class="list-group-item">{{project.name}} ({{project.total_time_spent}})</li>
+    <li class="list-group-item">
+        {{project.name}} 
+        <strong>
+            {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}
+        </strong>
+    </li>
     {% endfor %}
     </ul>
 </div>
