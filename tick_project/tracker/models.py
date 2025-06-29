@@ -30,6 +30,14 @@ class Task(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        # update done_at according to task.is_done 
+        if self.is_done and not self.done_at:
+            self.done_at = timezone.now()
+        if not self.is_done and self.done_at:
+            self.done_at = None
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name} - {self.project}"
 
@@ -39,10 +47,6 @@ class Task(models.Model):
     def total_seconds_spent(self):
         total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
         return total_seconds
-
-    def mark_as_done(self):
-        self.done_at = timezone.now()
-        self.is_done = True
 
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")
