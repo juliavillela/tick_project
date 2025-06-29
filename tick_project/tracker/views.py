@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Task, Project, Session
 from .forms import TaskForm
+from .helpers import timedelta_to_dict
 
 def index(request):
     template = "index.html"
@@ -51,7 +52,7 @@ def dashboard(request):
     context["tasks"] = pending_tasks[:5]
 
     # Add today's tracked time and number of tasks completed today to context
-    context["today_time"] = timedelta(seconds=today_time)
+    context["today_time"] = timedelta_to_dict(timedelta(seconds=today_time))
     context ["today_tasks"] = len(today_tasks)
     return render(request, template, context)
 
