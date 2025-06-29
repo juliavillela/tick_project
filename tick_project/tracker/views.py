@@ -1,9 +1,10 @@
 from datetime import timedelta
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
-from .models import Task, Project
+from .models import Task, Project, Session
 from .forms import TaskForm
 
 def index(request):
@@ -104,10 +105,45 @@ def task_delete(request, pk):
         return render(request, template, context)
     
 @login_required
-def track(request, pk):
+def session_start(request, pk):
+    # If a session is already in progress: redirect to current_session.
+    session_id = request.session.get("current_session_id")
+    if session_id:
+        current_session = Session.objects.get(pk=session_id)
+        messages.error(request, f"You are already tracking a session for {current_session.task.name}, please finish it before starting another one.")
+        return redirect("tracker:session-active", pk=current_session.pk)
+    
     task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    if request.method == "POST":
+        session = Session.objects.create(task=task)
+        session.set_start_time()
+        session.save()
+
+        request.session["current_session_id"] = session.pk
+ 
+        return redirect("tracker:session-active", pk=session.pk)
+
     template = "track.html"
     context = {
         "task": task
     }
     return render(request, template, context)
+
+@login_required
+def session_active(request, pk):
+    session = get_object_or_404(Session, pk=pk, task__project__user=request.user)
+    task = session.task
+    if request.method == "POST":
+        session.set_end_time()
+        session.save()
+
+        del request.session["current_session_id"]
+
+        return redirect("tracker:task-detail", pk=task.pk)
+    else:
+        template = "track.html"
+        context = {
+            "task": task,
+            "session": session
+        }
+        return render(request, template, context)
