@@ -40,9 +40,16 @@ def task_list(request):
         is_done=False  # pending tasks
     ).order_by('-last_edited')  # newest edited first
     
+    done_tasks = Task.objects.filter(
+        project__user=request.user,
+        is_done=True
+    ).order_by('-last_edited')  # newest edited first
+
     context = {
-        "pending_tasks": pending_tasks
+        "pending_tasks": pending_tasks,
+        "done_tasks": done_tasks,
     }
+    
     return render(request, "task_list.html", context)
 
 @login_required
