@@ -2,20 +2,20 @@
 
 {% block content %}
 
-<h3>{{ task.name }}</h3>
-<div id="timer" data-start-time="{{ session.start_time|date:'c' }}">00:00:00</div>
+<h3 class="mb-2">{{ task.name }}</h3>
+<div id="timer" class="timer-clock mb-2" data-start-time="{{ session.start_time|date:'c' }}">00:00:00</div>
 
 {% if session %}
-  <form method="post">
+  <form method="post" class="text-center">
     {% csrf_token %}
     <input type="hidden" name="task_id" value="{{task.id}}">
-    <button class="btn btn-primary" type="submit">stop</button>
+    <button class="timer-button" type="submit">⏹</button>
   </form>
 {% else %}
-  <form method="post">
+  <form method="post" class="text-center">
     {% csrf_token %}
     <input type="hidden" name="session_id" value="{{session.id}}">
-    <button class="btn btn-primary" type="submit">start</button>
+    <button class="timer-button" type="submit">▶</button>
   </form>
 {% endif %}
 
