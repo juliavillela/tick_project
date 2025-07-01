@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="mb-3">
+    <div class="mb-2">
+        <h3 class="mb-3">Projects</h3>
+        <a class="button" href="#">create project</a>
+    </div>
+</section>
+<section class="mb-3">
+    {% for project in projects %}
+        <div class="card card-li">
+            <a href="#">{{project.name}}</a>
+            <span class="small muted bold">
+                {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}
+            </span>
+        </div>
+    {% endfor %}
+</section>
+
+{% endblock %}

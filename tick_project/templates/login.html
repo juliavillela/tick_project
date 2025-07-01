@@ -1,20 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="mt-3">login</h1>
+<h1 class="mb-3">Login</h1>
 
-<form method="post">
+<form method="post" class="form">
     {% csrf_token %}
-    <div class="mb-3">
+    <div>
       <label for="email" class="form-label">Email address</label>
       <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
     </div>
-    <div class="mb-3">
+    <div>
       <label for="password" class="form-label">Password</label>
       <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" name="password">
     </div>
-    <button type="submit" class="btn btn-primary">login</button>
-    <div> Don't have an account? <a href="{% url 'users:register' %}">register</a></div>
+    <button type="submit" class="button">login</button>
+    <div> Don't have an account? <a href="{% url 'users:register' %}" class="link">register</a></div>
   </form>
 
 {% endblock %}

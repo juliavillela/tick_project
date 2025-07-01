@@ -1,35 +1,27 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="mt-3">Tasks</h3>
-<a class="btn btn-primary" href="{% url 'tracker:task-create' %}">create task</a>
-<hr>
-<h3>pending</h3>
-<div class="card">
-    <ul class="list-group list-group-flush">
-    {% for task in pending_tasks %}
-    <li class="list-group-item">
-        <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
-        <strong>
-            {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
-        </strong>
-    </li>
-    {% endfor %}
-    </ul>
-</div>
 
+<section class="mb-3">
+    <div class="mb-2">
+        <h3 class="mb-3">Tasks</h3>
+        <a class="button" href="{% url 'tracker:task-create' %}">create task</a>
+    </div>
+</section>
+<section class="mb-3">
+    <h3 class="mb-2">pending</h3>
+        {% include "partials/_pending_task_list.html" with pending_tasks=pending_tasks current_session=current_session %}
+</section>
 <hr>
-<h3>done</h3>
-<div class="card">
-    <ul class="list-group list-group-flush">
-    {% for task in done_tasks %}
-    <li class="list-group-item">
-        <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
-        <strong>
-            {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
-        </strong>
-    </li>
-    {% endfor %}
-    </ul>
-</div>
+<section>
+    <h3 class="mb-2">done</h3>
+        {% for task in done_tasks %}
+        <div class="card card-li">
+            <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
+            <span class="small muted bold">
+                {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+            </span>
+        </div>
+        {% endfor %}
+</section>
 {% endblock %}

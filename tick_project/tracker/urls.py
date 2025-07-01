@@ -14,5 +14,7 @@ urlpatterns = [
     path("task/<int:pk>/delete/", views.task_delete, name="task-delete"),
     
     path("track/<int:pk>/", views.session_start, name="session-start"),
-    path("track/session/<int:pk>", views.session_active, name="session-active")
+    path("track/session/<int:pk>", views.session_active, name="session-active"),
+    
+    path("projects/", views.project_list, name="projects"),
 ]

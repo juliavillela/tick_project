@@ -180,3 +180,11 @@ def session_active(request, pk):
             "session": session
         }
         return render(request, template, context)
+    
+@login_required
+def project_list(request):
+    context = current_session_context(request)
+
+    context["projects"] = Project.objects.filter(user=request.user).order_by('-last_edited')
+
+    return render(request, "project_list.html", context)
