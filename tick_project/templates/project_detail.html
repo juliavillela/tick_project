@@ -15,29 +15,32 @@
         </div>
         <div class="small"><span class="muted">Created at:</span> {{ project.created_at|date }}</div>
     </div>
-        <div>
-            <div class="card summary-card d-flex-even">
-                <div class="container">
-                    <div class="status-title">
-                        focused for
-                    </div>
-                    <div class="status-data">
-                        <strong>
-                            {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}
-                        </strong>
-                    </div>
+    <div class="mb-2">
+        <div class="card summary-card d-flex-even">
+            <div class="container">
+                <div class="status-title">
+                    focused for
                 </div>
-
-                <div class="container">
-                    <div class="status-title">
-                        tasks
-                    </div>
-                    <div class="status-data">
-                        {{done_tasks|length}}/{{project.tasks.all|length}}
-                    </div>
+                <div class="status-data">
+                    <strong>
+                        {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}
+                    </strong>
                 </div>
             </div>
-        </div>    
+
+            <div class="container">
+                <div class="status-title">
+                    tasks
+                </div>
+                <div class="status-data">
+                    {{done_tasks|length}}/{{project.tasks.all|length}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <a class="button" href="{% url 'tracker:project-create-task' pk=project.pk %}">create task</a>
+    </div>
 </section>
 
 <section class="mb-3">

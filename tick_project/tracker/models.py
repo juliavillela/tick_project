@@ -62,6 +62,7 @@ class Session(models.Model):
         super().save(*args, **kwargs)
         # update last_edited timestamp on task when a session is saved.
         Task.objects.filter(pk=self.task.pk).update(last_edited=timezone.now())
+        Project.objects.filter(pk=self.task.project.pk).update(last_edited=timezone.now())
 
     def set_start_time(self):
         self.start_time = timezone.now()

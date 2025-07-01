@@ -243,3 +243,22 @@ def project_delete(request, pk):
         context["project"] = project
 
         return render(request, "project_delete_form.html", context)
+    
+@login_required
+def create_task_for_project(request, pk):
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = TaskForm(request.POST, user=request.user, project=project)
+        if form.is_valid():
+            task = form.save(commit=False)
+            task.project = project
+            task.save()
+            return redirect("tracker:project-detail", pk=project.pk)
+
+    else:
+        context = current_session_context(request)
+        context["form"] = TaskForm(project=project)
+        context["project"] = project
+
+        return render(request, "task_form.html", context)

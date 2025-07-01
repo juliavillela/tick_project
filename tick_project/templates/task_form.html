@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="mb-3">Create new task</h3>
+
+{% if project %}
+  <h3 class="mb-3">Create new task in project: {{project.name}}</h3>
+{% else %}
+  <h3 class="mb-3">Create new task</h3>
+{% endif %}
+
 <form method="post" class="form">
     {% csrf_token %}
     {% for field in form %}
@@ -14,7 +20,7 @@
       </div>
     {% endfor %}
     <button type="submit" class="button">Save</button>
-    <a class="button" href="{{ referer|default:'#' }}">cancel</a>
+    <a class="button" onclick="history.back()">cancel</a>
   </form>
 
 {% endblock %}
