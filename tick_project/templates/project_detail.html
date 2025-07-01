@@ -10,8 +10,8 @@
             {{project.name}}
         </h3>
         <div class="float-end small">
-            <a href="#">edit</a>
-            <a href="#">delete</a>
+            <a href="{% url 'tracker:project-update' project.pk %}">edit</a>
+            <a href="{% url 'tracker:project-delete' project.pk %}">delete</a>
         </div>
         <div class="small"><span class="muted">Created at:</span> {{ project.created_at|date }}</div>
     </div>

@@ -215,3 +215,31 @@ def project_create(request):
 
         return render(request, "project_form.html", context)
 
+@login_required
+def project_update(request, pk):
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = ProjectForm(request.POST, instance=project)
+        if form.is_valid():
+            project.save()
+            return redirect("tracker:project-detail", pk=project.pk)
+    else:
+        context = current_session_context(request)
+        context["form"] = ProjectForm(instance=project)
+
+        return render(request, "project_form.html", context)
+
+@login_required
+def project_delete(request, pk):
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+
+    if request.method == "POST":
+        project.delete()
+        return redirect("tracker:projects")
+    else:
+        context = current_session_context(request)
+
+        context["project"] = project
+
+        return render(request, "project_delete_form.html", context)
