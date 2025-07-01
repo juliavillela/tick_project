@@ -188,3 +188,14 @@ def project_list(request):
     context["projects"] = Project.objects.filter(user=request.user).order_by('-last_edited')
 
     return render(request, "project_list.html", context)
+
+@login_required
+def project_detail(request, pk):
+    context = current_session_context(request)
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+    context["project"] = project
+    
+    context["pending_tasks"] = project.tasks.filter(is_done=False).order_by('-last_edited')
+    context["done_tasks"] = project.tasks.filter(is_done=True).order_by('-last_edited')
+    
+    return render(request, "project_detail.html", context)

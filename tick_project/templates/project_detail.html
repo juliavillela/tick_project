@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'tracker:projects' %}">◂ project list</a>
+</div>
+<section class="mb-3">
+    <div class="mb-2">
+        <h3 class="mb-1">
+            {{project.name}}
+        </h3>
+        <div class="float-end small">
+            <a href="#">edit</a>
+            <a href="#">delete</a>
+        </div>
+        <div class="small"><span class="muted">Created at:</span> {{ project.created_at|date }}</div>
+    </div>
+        <div>
+            <div class="card summary-card d-flex-even">
+                <div class="container">
+                    <div class="status-title">
+                        focused for
+                    </div>
+                    <div class="status-data">
+                        <strong>
+                            {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}
+                        </strong>
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="status-title">
+                        tasks
+                    </div>
+                    <div class="status-data">
+                        {{done_tasks|length}}/{{project.tasks.all|length}}
+                    </div>
+                </div>
+            </div>
+        </div>    
+</section>
+
+<section class="mb-3">
+    <h3 class="mb-2">pending</h3>
+        {% include "partials/_pending_task_list.html" with pending_tasks=pending_tasks current_session=current_session %}
+</section>
+
+<section>
+    <h3 class="mb-2">done</h3>
+        {% for task in done_tasks %}
+        <div class="card card-li">
+            <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
+            <span class="small muted bold">
+                {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+            </span>
+        </div>
+        {% endfor %}
+</section>
+{% endblock %}
