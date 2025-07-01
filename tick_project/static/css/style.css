@@ -4,8 +4,9 @@
     --bg-color-accent: #F2F0EA;
     --bg-color-accent-dark: #dfdcd2;
     --text-color: #121212;
-    --text-color-muted: #7b7b7b;
+    --text-color-muted: #999999;
     --border-radius: 20px;
+    --color-accent:#57c7b3;
 }
 
 body{
@@ -196,6 +197,18 @@ button{
     grid-template-columns: auto min-content;
 }
 
+.card-li.active{
+    grid-template-columns: min-content auto min-content;
+}
+
+.card-li.active .active-icon{
+    width: 10px;
+    height: 10px;
+    box-shadow: 1px 1px var(--color-accent);
+    background-color: var(--color-accent);
+    border-radius: 100%;
+    margin: 0.3rem .3rem;
+}
 
 .focus-button{
     font-size: inherit;
