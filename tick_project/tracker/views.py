@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 from .models import Task, Project, Session
-from .forms import TaskForm
+from .forms import TaskForm, ProjectForm
 from .helpers import timedelta_to_dict, current_session_context
 
 def index(request):
@@ -199,3 +199,19 @@ def project_detail(request, pk):
     context["done_tasks"] = project.tasks.filter(is_done=True).order_by('-last_edited')
     
     return render(request, "project_detail.html", context)
+
+@login_required
+def project_create(request):
+    if request.method == "POST":
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            return redirect("tracker:project-detail", pk=project.pk)
+    else:
+        context = current_session_context(request)
+        context["form"] = ProjectForm()
+
+        return render(request, "project_form.html", context)
+

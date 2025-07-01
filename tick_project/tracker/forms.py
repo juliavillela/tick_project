@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import Task
+from .models import Task, Project
 
 class TaskForm(ModelForm):
     class Meta:
@@ -19,3 +19,12 @@ class TaskForm(ModelForm):
                 field.widget.attrs.update({'class': 'form-control'})
             elif name == "is_done":
                 field.widget.attrs.update({'class': 'form-check-input'})
+
+class ProjectForm(ModelForm):
+    class Meta:
+        model = Project
+        fields = ["name"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs.update({'class': 'form-control'})

@@ -17,5 +17,6 @@ urlpatterns = [
     path("track/session/<int:pk>", views.session_active, name="session-active"),
     
     path("projects/", views.project_list, name="projects"),
-    path("project/<int:pk>", views.project_detail, name="project-detail")
+    path("project/<int:pk>", views.project_detail, name="project-detail"),
+    path("project/", views.project_create, name="project-create"),
 ]

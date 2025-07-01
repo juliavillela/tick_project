@@ -38,7 +38,7 @@
 </section>
 
 <section>
-    <a class="float-end small" href="#">see all</a>
+    <a class="float-end small" href="{% url 'tracker:projects' %}">see all</a>
     <h3 class="mb-2">Projects</h3> 
         {% include "partials/_project_list.html" with projects=projects %}
 </section>
