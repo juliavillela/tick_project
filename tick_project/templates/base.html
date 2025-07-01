@@ -14,8 +14,8 @@
 <body>
 
 <header>
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
+    <nav class="navbar">
+        <div>
           {% if request.user.is_authenticated%}
               {% if current_session %}
                 <a class="navbar-brand" href="{% url 'tracker:session-active' pk=current_session.pk %}">
