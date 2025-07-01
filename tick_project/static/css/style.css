@@ -101,6 +101,24 @@ button{
     color: var(--text-color-muted);
 }
 
+.button{
+    background-color: var(--bg-color-accent);
+    padding: .4rem .6rem;
+    box-shadow: 1px 1px 3px 0px #0000002e;
+    font: inherit;
+}
+/* ------------ COMPONENTS: FORM ------------ */
+.form-control {
+    padding: .6rem .6rem;
+    margin-bottom: 1rem;
+    border: none;
+    display: block;
+    width: -webkit-fill-available;
+    margin-top: .6rem;
+    background-color: var(--bg-color-accent);
+}
+
+
 /* ------------ COMPONENTS: NAVBAR ------------ */
 
 .navbar{
@@ -183,5 +201,5 @@ button{
 
 .timer-button{
     font-size: 3rem;
-    
+
 }
