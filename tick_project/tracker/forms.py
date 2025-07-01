@@ -8,9 +8,19 @@ class TaskForm(ModelForm):
         fields = ["project", "name", "is_done"]
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop("user")
+        project = kwargs.pop("project", None)
+        user = kwargs.pop("user", None)
+
         super().__init__(*args, **kwargs)
-        self.fields["project"].queryset = user.project_set.all()
+
+        # Filter project choices by user
+        if user:
+            self.fields["project"].queryset = user.project_set.all()
+
+        # If a specific project is passed, remove field and use it in view
+        if project:
+            self.fields.pop("project")
+
         # set label for is_done field
         self.fields["is_done"].label = "Done"
         # set form-control bs class to fields
