@@ -5,19 +5,15 @@
 
 <form method="post" class="form">
     {% csrf_token %}
-    <div>
-      <label for="email" class="form-label">Email address</label>
-      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" name="email">
-    </div>
-    <div>
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" name="password">
-      <div id="passwordHelp" class="form-help-text">your password must have at least 8 characters including numbers and letters.</div>
-    </div>
-    <div>
-        <label for="password-confirmation" class="form-label">Password confirmation</label>
-        <input type="password" class="form-control" id="password-confirmation" name="password-confirmation">
-    </div>
+      {% for field in form %}
+      <div class="mb-1">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+          <div class="text-danger">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
     <button type="submit" class="button">create account</button>
     <div> already have an account? <a href="{% url 'users:login' %}" class="link">login</a></div>
   </form>
