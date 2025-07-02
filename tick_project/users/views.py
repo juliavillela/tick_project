@@ -4,7 +4,7 @@ from django.contrib.auth import logout, authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
-from .forms import RegisterForm
+from .forms import RegisterForm, EmailAuthenticationForm
 
 login_redirect = 'tracker:dashboard'
 User = get_user_model()
@@ -30,17 +30,19 @@ def register(request):
 def login_view(request):
     template = "login.html"
     if request.method == "POST":
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        user = authenticate(request=request, username=email, password=password)
-        if user is not None:
+        form = EmailAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
             login(request, user)
             return redirect(login_redirect)
         else:
             messages.error(request, "Invalid email or password.")
-            return render(request, template)
+            return render(request, template, {"form":form})
     else:
-        return render(request, template)
+        context = {
+            "form": EmailAuthenticationForm(request)
+        }
+        return render(request, template, context)
 
 def logout_view(request):
     logout(request)
