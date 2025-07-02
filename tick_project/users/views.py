@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login, get_user_model
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
 login_redirect = 'tracker:dashboard'
@@ -45,3 +46,10 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("tracker:index")
+
+@login_required
+def user_detail(request):
+    context = {
+        "user": request.user
+    }
+    return render(request, "user_detail.html", context)

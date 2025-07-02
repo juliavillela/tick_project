@@ -27,7 +27,7 @@
               {% else %}
                 <a class="navbar-brand" href="{% url 'tracker:dashboard' %}">tick</a>
               {% endif %}
-            <a href="{% url 'users:logout' %}">logout</a>
+            <a href="{% url 'users:account' %}">account</a>
           {% else %}
             <a class="navbar-brand" href="{% url 'tracker:index' %}">tick</a>
             <a href="{% url 'users:login' %}">login</a>
