@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="mb-3">Edit user email</h1>
-
+<h1 class="mb-3">{{title}}</h1>
+{% if details %}
+<p class="mb-2 muted">{{details}}</p>
+{% endif %}
 <form method="post" class="form">
     {% csrf_token %}
     {% for field in form %}

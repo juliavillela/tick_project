@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordChangeForm
 from django.core.exceptions import ValidationError
 from django import forms
 from .models import User
@@ -62,7 +62,10 @@ class EmailUpdateForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email',]
+        fields = ('email',)
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop("user")
@@ -80,4 +83,15 @@ class EmailUpdateForm(forms.ModelForm):
         if not self.user.check_password(password):
             self.add_error("password", "Incorrect password.")
 
+class PasswordUpdateForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ("email",)
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
     
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(user, *args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({'class': 'form-control'})
