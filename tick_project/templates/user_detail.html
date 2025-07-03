@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="mb-2"> My account</h3>
+<div><span class="muted">logged in as:</span> {{ user.email }}</div>
+<ul>
+    <li><a class="link" href="{% url 'users:update-email'%}">change email</a></li>
+    <li><a href="">change password</a></li>
+    <li><a class="link" href="{% url 'users:logout'%}">logout</a></li>
+    <li><a href="">delete account</a></li>
+</ul>
+
+{% endblock %}

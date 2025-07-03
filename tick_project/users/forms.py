@@ -53,3 +53,31 @@ class EmailAuthenticationForm(AuthenticationForm):
         super().__init__(request, *args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+class EmailUpdateForm(forms.ModelForm):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirm password"
+    )
+
+    class Meta:
+        model = User
+        fields = ['email',]
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exclude(pk=self.user.pk).exists():
+            raise forms.ValidationError("Email is already registered to a different account.")
+        return email
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        if not self.user.check_password(password):
+            self.add_error("password", "Incorrect password.")
+
+    
