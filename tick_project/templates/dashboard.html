@@ -34,7 +34,19 @@
 <section class="mb-3">
     <a class="float-end small" href="{% url 'tracker:tasks' %}">see all</a>
     <h3 class="mb-2">Tasks</h3> 
-        {% include "partials/_pending_task_list.html" with pending_tasks=tasks current_session=current_session %}
+    {% for task in tasks %}
+        {% include "partials/_pending_task_list_item.html" with task=task current_session=current_session %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted mb-3">
+                You don't have any pending tasks.
+            </div>
+            <div class="mb-1">
+               <a href="{% url 'tracker:task-create' %}" class="button button-light"> create task</a>
+            </div>
+        </div>
+    {% endfor %}
+    
 </section>
 
 <section>

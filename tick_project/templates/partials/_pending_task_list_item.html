@@ -1,0 +1,45 @@
+{% if current_session %}
+    {% if current_session.task.pk == task.pk %}
+        <div class="card card-li w-action active">
+            <div class="active-icon"></div>
+            <div>
+                <a href="{% url 'tracker:task-detail' task.pk%}">
+                    {{task.name}}
+                </a>
+                {% if task.total_seconds_spent > 0 %}
+                <span class="small muted bold">
+                    {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+                </strong>
+                {% endif %}
+            </div>
+            <a href="{% url 'tracker:session-start' task.pk %}">▶</a>
+        </div>
+    {% else %}
+        <div class="card card-li">
+            <div>
+                <a href="{% url 'tracker:task-detail' task.pk%}">
+                    {{task.name}}
+                </a>
+                {% if task.total_seconds_spent > 0 %}
+                <span class="small muted bold">
+                    {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+                </strong>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="card card-li w-action">
+        <div>
+            <a href="{% url 'tracker:task-detail' task.pk%}">
+                {{task.name}}
+            </a>
+            {% if task.total_seconds_spent > 0 %}
+            <span class="small muted bold">
+                {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
+            </strong>
+            {% endif %}
+        </div>
+        <a href="{% url 'tracker:session-start' task.pk %}">▶</a>
+    </div>
+{% endif %}

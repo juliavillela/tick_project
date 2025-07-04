@@ -45,7 +45,15 @@
 
 <section class="mb-3">
     <h3 class="mb-2">pending</h3>
-        {% include "partials/_pending_task_list.html" with pending_tasks=pending_tasks current_session=current_session %}
+    {% for task in pending_tasks %}
+        {% include "partials/_pending_task_list_item.html" with task=task current_session=current_session %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You don't have any pending tasks for this project.
+            </div>
+        </div>
+    {% endfor %}
 </section>
 
 <section>
