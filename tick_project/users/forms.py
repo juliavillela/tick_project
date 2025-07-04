@@ -95,3 +95,19 @@ class PasswordUpdateForm(PasswordChangeForm):
         super().__init__(user, *args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+
+class UserDeleteForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}),
+        label="Confirm password"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop("user")
+        super().__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("password")
+        if not self.user.check_password(password):
+            self.add_error("password", "Incorrect password.")

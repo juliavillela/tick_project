@@ -4,9 +4,10 @@ from django.contrib.auth import logout, authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
-from .forms import RegisterForm, EmailAuthenticationForm, EmailUpdateForm, PasswordUpdateForm
+from .forms import RegisterForm, EmailAuthenticationForm, EmailUpdateForm, PasswordUpdateForm, UserDeleteForm
 
 login_redirect = 'tracker:dashboard'
+logout_redirect = 'tracker:index'
 User = get_user_model()
 
 def register(request):
@@ -46,7 +47,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("tracker:index")
+    return redirect(logout_redirect)
 
 @login_required
 def user_detail(request):
@@ -69,6 +70,7 @@ def user_update_email(request):
         context = {
             "form": EmailUpdateForm(instance=request.user, user=request.user),
             "title": "Edit user email.",
+            "actioin": "Save",
         }
 
         return render(request, template, context)
@@ -88,5 +90,27 @@ def user_update_password(request):
             "form": PasswordUpdateForm(user=request.user),
             "title": "Choose a new password.",
             "details": "Once you change your password you will be logged out and required to log back in with the new password.",
+            "action": "Save",
         }
+
+        return render(request, template, context)
+    
+@login_required
+def user_delete(request):
+    template = "user_form.html"
+
+    if request.method == "POST": 
+        user = request.user
+        logout(request)
+        user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect(logout_redirect)
+    else:
+        context = {
+            "form": UserDeleteForm(user=request.user),
+            "title": "Delete your account.",
+            "details": "This action will permanently delete your account and all data associated with it.",
+            "action": "Delete",
+        }
+
         return render(request, template, context)

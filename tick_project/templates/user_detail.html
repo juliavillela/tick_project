@@ -6,9 +6,9 @@
 <div><span class="muted">logged in as:</span> {{ user.email }}</div>
 <ul>
     <li><a class="link" href="{% url 'users:update-email'%}">change email</a></li>
-    <li><a href="{% url 'users:update-password' %}">change password</a></li>
+    <li><a class="link" href="{% url 'users:update-password' %}">change password</a></li>
     <li><a class="link" href="{% url 'users:logout'%}">logout</a></li>
-    <li><a href="">delete account</a></li>
+    <li><a class="link" href="{% url 'users:delete'%}">delete account</a></li>
 </ul>
 
 {% endblock %}
