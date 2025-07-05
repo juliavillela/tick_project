@@ -84,7 +84,6 @@ def task_create(request):
 
         context = current_session_context(request)
         context["form"] = TaskForm(user=request.user),
-        context ["referer"] = request.META.get("HTTP_REFERER", None)
         
         return render(request,template, context)
 
@@ -116,14 +115,12 @@ def task_update(request, pk):
         template = "task_form.html"
         
         context["form"] = TaskForm(user=request.user, instance=task),
-        context["referer"] = request.META.get("HTTP_REFERER", None)
 
         return render(request,template, context)
 
 @login_required   
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk, project__user=request.user)
-    referer = request.META.get("HTTP_REFERER", None)
 
     if request.method == "POST":
         task.delete()
@@ -133,7 +130,6 @@ def task_delete(request, pk):
         template = "task_delete_form.html"
 
         context["task"] = task
-        context["referer"] = referer
         
         return render(request, template, context)
     

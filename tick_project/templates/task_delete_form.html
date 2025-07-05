@@ -6,7 +6,7 @@
 <form method="post" class="form">
     {% csrf_token %}
     <button type="submit" class="button">delete</button>
-    <a class="button" href="{{ referer|default:'#' }}">cancel</a>
+    <a class="button" onclick="history.back()">cancel</a>
   </form>
 
 {% endblock %}
