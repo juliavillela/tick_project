@@ -50,9 +50,8 @@ def login_view(request):
 
 def logout_view(request):
     # finish current session before logging user out.
-    current_session_id = request.session.get("current_session_id")
-    if current_session_id:
-        current_session = Session.objects.get(pk=current_session_id)
+    current_session = Session.objects.get_active_session(request.user)
+    if current_session:
         current_session.set_end_time()
         current_session.save()
     logout(request)

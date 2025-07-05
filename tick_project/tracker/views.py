@@ -139,28 +139,30 @@ def task_delete(request, pk):
     
 @login_required
 def session_start(request, pk):
+    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+
     # If a session is already in progress: redirect to current_session.
-    session_id = request.session.get("current_session_id")
-    if session_id:
-        current_session = Session.objects.get(pk=session_id)
-        messages.error(request, f"You are already tracking a session for {current_session.task.name}, please finish it before starting another one.")
+    current_session = Session.objects.get_active_session(request.user)
+    if current_session:
+        if current_session.task != task:
+            messages.error(request, f"You are already tracking a session for '{current_session.task.name}', please finish it before starting another one.")
         return redirect("tracker:session-active", pk=current_session.pk)
     
-    task = get_object_or_404(Task, pk=pk, project__user=request.user)
+    # Create a new session for task
     if request.method == "POST":
         session = Session.objects.create(task=task)
         session.set_start_time()
         session.save()
-
-        request.session["current_session_id"] = session.pk
  
         return redirect("tracker:session-active", pk=session.pk)
+    # Display track starting page
+    else:
 
-    template = "track.html"
-    context = {
-        "task": task
-    }
-    return render(request, template, context)
+        template = "track.html"
+        context = {
+            "task": task
+        }
+        return render(request, template, context)
 
 @login_required
 def session_active(request, pk):
@@ -169,8 +171,6 @@ def session_active(request, pk):
     if request.method == "POST":
         session.set_end_time()
         session.save()
-
-        del request.session["current_session_id"]
 
         return redirect("tracker:task-detail", pk=task.pk)
     else:
