@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
 from .forms import RegisterForm, EmailAuthenticationForm, EmailUpdateForm, PasswordUpdateForm, UserDeleteForm
+from tracker.models import Project, Session
 
 login_redirect = 'tracker:dashboard'
 logout_redirect = 'tracker:index'
@@ -17,6 +18,8 @@ def register(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            # create a default project for new user
+            Project.objects.create(user=user, name="General")
             login(request,user)
             return redirect(login_redirect)
         else:
@@ -46,6 +49,12 @@ def login_view(request):
         return render(request, template, context)
 
 def logout_view(request):
+    # finish current session before logging user out.
+    current_session_id = request.session.get("current_session_id")
+    if current_session_id:
+        current_session = Session.objects.get(pk=current_session_id)
+        current_session.set_end_time()
+        current_session.save()
     logout(request)
     return redirect(logout_redirect)
 
