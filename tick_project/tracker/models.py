@@ -50,10 +50,25 @@ class Task(models.Model):
         total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
         return total_seconds
 
+class SessionManager(models.Manager):
+    def get_active_session(self, user):
+        active_session = self.filter(
+            task__project__user = user,
+            end_time__isnull = True
+        ).first()
+        return active_session
+
+    def end_current_session(self, user):
+        active_session = self.get_active_session(user)
+        if active_session:
+            active_session.set_end_time()
+
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
+
+    objects = SessionManager()
 
     def __str__(self):
         return f"{self.task}({self.start_time})"
