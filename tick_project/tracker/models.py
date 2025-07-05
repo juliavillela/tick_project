@@ -1,4 +1,5 @@
 from datetime import timedelta
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -63,6 +64,14 @@ class SessionManager(models.Manager):
         if active_session:
             active_session.set_end_time()
             active_session.save()
+
+    def create_new_session(self, user, task):
+        if self.get_active_session(user):
+            raise ValidationError
+        session = self.model(task=task)
+        session.set_start_time()
+        session.save()
+        return session
 
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")

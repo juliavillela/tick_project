@@ -150,11 +150,9 @@ def session_start(request, pk):
     
     # Create a new session for task
     if request.method == "POST":
-        session = Session.objects.create(task=task)
-        session.set_start_time()
-        session.save()
- 
+        session = Session.objects.create_new_session(user=request.user,task=task)
         return redirect("tracker:session-active", pk=session.pk)
+   
     # Display track starting page
     else:
 
