@@ -62,6 +62,7 @@ class SessionManager(models.Manager):
         active_session = self.get_active_session(user)
         if active_session:
             active_session.set_end_time()
+            active_session.save()
 
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")
