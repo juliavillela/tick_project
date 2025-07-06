@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h3 class="mb-3">{{date}}</h3>
+    <a class="small muted link" href="{% url 'tracker:daily' previous %}">previous</a>
+    {% if next is not None %}
+    | <a class="small muted link" href="{% url 'tracker:daily' next %}">next</a>
+    {% endif %}
+
+</div>
+
+<h3 class="mb-2">Projects</h3> 
+{% for project in projects %}
+    <div class="card card-li">
+        <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
+        <span class="small muted bold">
+            {{project.daily_time_spent_dict.hours|stringformat:"02d"}}:{{project.daily_time_spent_dict.minutes|stringformat:"02d"}}
+        </span>
+    </div>
+{% endfor %}
+
+<h3 class="mb-2">Workflow</h3>
+{% for session in sessions %}
+<div class="card card-li" >
+    <span class="small muted">{{session.start_time|time}} - {{session.end_time|time}}</span>
+    {{session.task.name}}
+    <span class="small muted bold">
+        {{session.duration_dict.hours|stringformat:"02d"}}:{{session.duration_dict.minutes|stringformat:"02d"}}
+    </span>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

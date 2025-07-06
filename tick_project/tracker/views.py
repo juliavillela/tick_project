@@ -256,3 +256,32 @@ def create_task_for_project(request, pk):
         context["project"] = project
 
         return render(request, "task_form.html", context)
+
+@login_required
+def daily(request, days_ago):
+    date = timezone.now().date() - timedelta(days=days_ago)
+    template = "daily.html"
+    # Get user's tasks and projects, ordered by most recently edited
+    projects = Project.objects.filter(user = request.user).order_by('-last_edited')
+
+    daily_sessions = []
+    daily_projects = []
+    # Get projects today focused time
+    for project in projects:
+        sessions = project.sessions_by_date(date)
+        daily_sessions.extend(sessions)
+        daily_seconds= project.seconds_spent_by_date(date)
+        if daily_seconds > 0:
+            project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=daily_seconds))
+            daily_projects.append(project)
+
+    daily_sessions.sort(key=lambda s: s.start_time)
+
+    context = current_session_context(request)
+    context["projects"] = daily_projects
+    context["sessions"] = daily_sessions
+    context["date"] = date
+    context["previous"] = days_ago + 1
+    context["next"] = days_ago - 1 if days_ago > 0 else None
+
+    return render(request, template, context)

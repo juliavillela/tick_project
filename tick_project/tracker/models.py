@@ -25,6 +25,19 @@ class Project(models.Model):
         total_seconds = sum(task.total_seconds_spent() for task in self.tasks.all())
         return total_seconds
     
+    def sessions_by_date(self, date):
+        sessions = []
+        for task in self.tasks.all():
+            for session in task.sessions.all():
+                if session.start_time.date() == date:
+                    sessions.append(session)
+        return sessions
+    
+    def seconds_spent_by_date(self, date):
+        sessions = self.sessions_by_date(date)
+        seconds = sum(session.duration_in_seconds() for session in sessions)
+        return seconds
+
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
     name = models.CharField(max_length=280)
