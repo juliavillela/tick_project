@@ -31,7 +31,7 @@ def dashboard(request):
 
     # Fetch user-specific data
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
-    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=today, days=1)
+    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=today, days=0)
     pending_tasks = Task.objects.by_user_and_is_pending(user=request.user)
     today_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=today, days=1)
 
@@ -260,7 +260,7 @@ def daily(request, days_ago):
 
     # Fetch all of the user's projects, ordered by most recently edited
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
-    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date, days=1)
+    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date, days=0)
 
     daily_sessions = [] # List to collect all sessions that occurred on the target date
     daily_projects = [] # List to collect only projects that had sessions on that date
@@ -288,7 +288,7 @@ def daily(request, days_ago):
     context["sessions"] = daily_sessions
     context["daily_tasks"] = len(today_tasks)
     context["daily_time"] = timedelta_to_dict(timedelta(seconds=daily_time))
-    context["date"] = date
+    context["date"] = date.strftime("%A, %B %d")
     context["previous"] = days_ago + 1
     context["next"] = days_ago - 1 if days_ago > 0 else None
 
