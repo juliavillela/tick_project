@@ -15,11 +15,15 @@
 <section class="mb-3">
     <h3 class="mb-2">Projects</h3> 
     {% for project in projects %}
-        <div class="card card-li">
-            <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
-            <span class="small muted bold">
-                {{project.daily_time_spent_dict.hours|stringformat:"02d"}}:{{project.daily_time_spent_dict.minutes|stringformat:"02d"}}
-            </span>
+        <div class="card card-li grid-min-content-auto">
+            <div class="pie-chart" style="--percentage: {{project.percentage}};">
+            </div>
+            <div>
+                <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
+                <span class="small muted bold">
+                    {{project.daily_time_spent_dict.hours|stringformat:"02d"}}:{{project.daily_time_spent_dict.minutes|stringformat:"02d"}}
+                </span>
+            </div>
         </div>
     {% endfor %}
 </section>
@@ -28,10 +32,10 @@
     <h3 class="mb-2">Workflow</h3>
     <div>
     {% for session in sessions %}
-        <div class="workflow-list-item small" >
+        <div class="mb-1 small" >
             <div>
                 <span class="muted">{{session.start_time|time}}</span>
-                <div class="card card-li">
+                <div class="card card-li grid-min-content-auto">
                     <div class="duration-representation" style="height:{{session.duration_in_height_units}}rem;">
                     </div>
                     <div>

@@ -275,6 +275,7 @@ def daily(request, days_ago):
         # If time was spent, store that info on the project and add it to the list
         if daily_seconds > 0:
             # Attach a human-readable time dictionary to the project (e.g., {'hours': 1, 'minutes': 30})
+            project.daily_seconds = daily_seconds
             project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=daily_seconds))
             daily_projects.append(project)
 
@@ -282,6 +283,10 @@ def daily(request, days_ago):
     daily_sessions.sort(key=lambda s: s.start_time)
     # Sum duration of daily sessions
     daily_time = sum(session.duration_in_seconds() for session in daily_sessions)
+
+    # Calculate what percent of work time went into each project
+    for project in daily_projects:
+        project.percentage = round((project.daily_seconds/daily_time)*100)
 
     context = current_session_context(request)
     context["projects"] = daily_projects
