@@ -259,22 +259,37 @@ def create_task_for_project(request, pk):
 
 @login_required
 def daily(request, days_ago):
+    """
+    Display a summary of the user's activity for a specific day.
+
+    The view shows all sessions started on the selected day (today - days_ago),
+    grouped by project. Only projects with tracked time are displayed.
+    The user can navigate to previous or next days.
+    """
+    # Calculate the target date by subtracting `days_ago` from today
     date = timezone.now().date() - timedelta(days=days_ago)
     template = "daily.html"
-    # Get user's tasks and projects, ordered by most recently edited
+
+    # Fetch all of the user's projects, ordered by most recently edited
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
 
-    daily_sessions = []
-    daily_projects = []
-    # Get projects today focused time
+    daily_sessions = [] # List to collect all sessions that occurred on the target date
+    daily_projects = [] # List to collect only projects that had sessions on that date
+    
+    # Iterate through the user's projects to gather relevant sessions
     for project in projects:
         sessions = project.sessions_by_date(date)
         daily_sessions.extend(sessions)
-        daily_seconds= project.seconds_spent_by_date(date)
+        # Sum the total time spent across sessions for this project
+        daily_seconds= sum(session.duration_in_seconds() for session in sessions)
+        
+        # If time was spent, store that info on the project and add it to the list
         if daily_seconds > 0:
+            # Attach a human-readable time dictionary to the project (e.g., {'hours': 1, 'minutes': 30})
             project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=daily_seconds))
             daily_projects.append(project)
 
+    # Sort all sessions by their start time (earliest first)
     daily_sessions.sort(key=lambda s: s.start_time)
 
     context = current_session_context(request)
