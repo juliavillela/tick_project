@@ -26,32 +26,20 @@ def dashboard(request):
     template = "dashboard.html"
     context = current_session_context(request)
 
-    # Get user's tasks and projects, ordered by most recently edited
-    tasks = Task.objects.filter(project__user=request.user).order_by('-last_edited')
+    # Get date reference
+    today = timezone.now().date()
+
+    # Fetch user-specific data
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
+    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=today, days=1)
+    pending_tasks = Task.objects.by_user_and_is_pending(user=request.user)
+    today_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=today, days=1)
 
-    # Add five most recently edited projects to context
-    context["projects"] = projects[:5]
-
-    # Collect tasks completed today and sessions started today
-    today_sessions = []
-    today_tasks = []
-    for task in tasks:
-        if task.is_done:
-            if task.done_at.date() == timezone.now().date():
-                today_tasks.append(task)
-        for session in task.sessions.all():
-            if session.start_time.date() == timezone.now().date():
-                today_sessions.append(session)
-    
     # Sum duration of today's sessions
     today_time = sum(session.duration_in_seconds() for session in today_sessions)
     
-    # Get pending tasks and add five most recent to context
-    pending_tasks = tasks.filter(is_done=False)
     context["tasks"] = pending_tasks[:5]
-
-    # Add today's tracked time and number of tasks completed today to context
+    context["projects"] = projects[:5]
     context["today_time"] = timedelta_to_dict(timedelta(seconds=today_time))
     context ["today_tasks"] = len(today_tasks)
     return render(request, template, context)
