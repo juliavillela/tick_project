@@ -260,6 +260,7 @@ def daily(request, days_ago):
 
     # Fetch all of the user's projects, ordered by most recently edited
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
+    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date, days=1)
 
     daily_sessions = [] # List to collect all sessions that occurred on the target date
     daily_projects = [] # List to collect only projects that had sessions on that date
@@ -279,10 +280,14 @@ def daily(request, days_ago):
 
     # Sort all sessions by their start time (earliest first)
     daily_sessions.sort(key=lambda s: s.start_time)
+    # Sum duration of daily sessions
+    daily_time = sum(session.duration_in_seconds() for session in daily_sessions)
 
     context = current_session_context(request)
     context["projects"] = daily_projects
     context["sessions"] = daily_sessions
+    context["daily_tasks"] = len(today_tasks)
+    context["daily_time"] = timedelta_to_dict(timedelta(seconds=daily_time))
     context["date"] = date
     context["previous"] = days_ago + 1
     context["next"] = days_ago - 1 if days_ago > 0 else None
