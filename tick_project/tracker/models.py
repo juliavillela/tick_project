@@ -26,11 +26,7 @@ class Project(models.Model):
         return total_seconds
     
     def sessions_by_date(self, date):
-        sessions = []
-        for task in self.tasks.all():
-            for session in task.sessions.all():
-                if session.start_time.date() == date:
-                    sessions.append(session)
+        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date, days=1)
         return sessions
     
     def seconds_spent_by_date(self, date):
@@ -85,6 +81,14 @@ class SessionManager(models.Manager):
         session.set_start_time()
         session.save()
         return session
+   
+    def by_project_and_start_date_within(self, project, date, days):
+        latest = date + timedelta(days=days)
+        return self.filter(
+            start_time__gte=date, 
+            start_time__lte=latest, 
+            task__project= project
+            )
 
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")
