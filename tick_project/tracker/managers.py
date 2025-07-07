@@ -33,4 +33,29 @@ class SessionManager(Manager):
             start_time__range=(start_datetime, end_datetime), 
             task__project= project
             )
+    
+    def by_user_and_start_date_within(self, user, date, days):
+        start_datetime = timezone.make_aware(datetime.combine(date, time.min))  # midnight start
+        end_datetime = timezone.make_aware(datetime.combine(date + timedelta(days=days), time.max)) # 23:59:59 end
 
+        return self.filter(
+            start_time__range=(start_datetime, end_datetime), 
+            task__project__user= user
+            )
+
+class TaskManager(Manager):
+    def by_user_and_is_pending(self, user):
+        return self.filter(
+            is_done = False,
+            project__user = user
+        ).order_by('-last_edited')
+    
+    def by_user_and_done_date_within(self, user, date, days):
+        start_datetime = timezone.make_aware(datetime.combine(date, time.min))  # midnight start
+        end_datetime = timezone.make_aware(datetime.combine(date + timedelta(days=days), time.max)) # 23:59:59 end
+
+        return self.filter(
+            project__user=user,
+            is_done=True,
+            done_at__range=(start_datetime, end_datetime)
+        )

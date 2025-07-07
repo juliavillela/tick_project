@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from django.conf import settings
 
-from .managers import SessionManager
+from .managers import SessionManager, TaskManager
 from .helpers import timedelta_to_dict
 # Create your models here.
 
@@ -41,6 +41,8 @@ class Task(models.Model):
     done_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
+
+    objects = TaskManager()
 
     def save(self, *args, **kwargs):
         # update done_at according to task.is_done 
