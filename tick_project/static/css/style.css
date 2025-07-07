@@ -218,6 +218,23 @@ button{
     font-size: inherit;
 }
 
+/* ------------ COMPONENTS: WORKFLOW-LIST ------------ */
+
+.workflow-list-item{
+    margin-bottom: .6rem;
+}
+
+.workflow-list-item .card-li{
+    display: grid;
+    grid-template-columns: min-content auto;
+}
+
+.duration-representation{
+    border-left: solid 3px var(--color-accent);
+    padding-left: .6rem;
+}
+
+
 /* ------------ COMPONENTS: TIMER ------------ */
 .timer-clock{
     background-color: var(--bg-color-accent);

@@ -26,7 +26,7 @@ class Project(models.Model):
         return total_seconds
     
     def sessions_by_date(self, date):
-        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date, days=1)
+        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date, days=0)
         return sessions
     
     def seconds_spent_by_date(self, date):
@@ -92,3 +92,11 @@ class Session(models.Model):
     
     def duration_dict(self):
         return timedelta_to_dict(timedelta(seconds=self.duration_in_seconds()))
+    
+    def duration_in_height_units(self):
+        """
+        Returns a float representing the session's duration 
+        normalized to height units (e.g., 1 unit = 25 minutes).
+        Used for visual representation in the UI.
+        """
+        return self.duration_in_seconds()/1500

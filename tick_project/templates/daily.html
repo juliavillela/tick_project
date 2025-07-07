@@ -26,16 +26,26 @@
 
 <section class="mb-3">
     <h3 class="mb-2">Workflow</h3>
+    <div>
     {% for session in sessions %}
-    <div class="card card-li" >
-        <span class="small muted">{{session.start_time|time}} - {{session.end_time|time}}</span>
-        {{session.task.name}}
-        <span class="small muted bold">
-            {{session.duration_dict.hours|stringformat:"02d"}}:{{session.duration_dict.minutes|stringformat:"02d"}}
-        </span>
+        <div class="workflow-list-item small" >
+            <div>
+                <span class="muted">{{session.start_time|time}}</span>
+                <div class="card card-li">
+                    <div class="duration-representation" style="height:{{session.duration_in_height_units}}rem;">
+                    </div>
+                    <div>
+                        {{session.task.name}}
+                        <span class="muted bold">
+                            {{session.duration_dict.hours|stringformat:"02d"}}:{{session.duration_dict.minutes|stringformat:"02d"}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
     {% endfor %}
+    </div>
 </section>
 
 {% endblock %}
