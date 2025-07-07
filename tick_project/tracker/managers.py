@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import datetime, time, timedelta
+from django.utils import timezone
 from django.db.models import Manager
 from django.core.exceptions import ValidationError
 
@@ -25,10 +26,11 @@ class SessionManager(Manager):
         return session
    
     def by_project_and_start_date_within(self, project, date, days):
-        latest = date + timedelta(days=days)
+        start_datetime = timezone.make_aware(datetime.combine(date, time.min))  # midnight start
+        end_datetime = timezone.make_aware(datetime.combine(date + timedelta(days=days), time.max)) # 23:59:59 end
+
         return self.filter(
-            start_time__gte=date, 
-            start_time__lte=latest, 
+            start_time__range=(start_datetime, end_datetime), 
             task__project= project
             )
-    
+
