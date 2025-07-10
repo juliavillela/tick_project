@@ -87,7 +87,8 @@ def user_update_password(request):
         form = PasswordUpdateForm(data=request.POST, user=request.user)
         if form.is_valid():
             updated_user = form.save()
-            return redirect("users:account")
+            logout(request)
+            return redirect("users:login")
         else:
             return render(request, template, {"form": form})
     else:
