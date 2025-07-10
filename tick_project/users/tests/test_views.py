@@ -47,7 +47,7 @@ class LoginViewTests(TestCase):
             email=self.email,
             password=self.password
         )
-        self.url = reverse("users:login")  # adjust if needed
+        self.url = reverse("users:login")
 
     def test_login_view_get(self):
         response = self.client.get(self.url)
@@ -81,3 +81,70 @@ class LoginViewTests(TestCase):
         # User should not be logged in
         user = get_user(self.client)
         self.assertFalse(user.is_authenticated)
+
+class UpdateEmailViewTests(TestCase):
+    def setUp(self):
+        self.email = "old@example.com"
+        self.password = "Securepassword123"
+        self.user = User.objects.create_user(
+            email=self.email, password=self.password
+        )
+        self.url = reverse("users:update-email")
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(self.url)
+        self.assertNotEqual(response.status_code, 200)
+        self.assertRedirects(response, f"/users/login/?next={self.url}")
+
+    def test_get_form_when_logged_in(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user_form.html")
+
+    def test_post_valid_data_updates_email(self):
+        new_email = "new@example.com"
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.post(self.url, {
+            "email": new_email,
+            "password": self.password 
+        })
+        # Refresh to get latest data from DB
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, new_email)
+        self.assertRedirects(response, reverse("users:account"))
+
+    def test_post_invalid_password_shows_errors(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.post(self.url, {
+            "email": "new@example.com",
+            "password": "wrongpassword"
+        })
+
+        # Should stay on form page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user_form.html")
+        # Form should contain an error message for password field
+        self.assertIn("password", response.context["form"].errors)
+
+        # Email should not be updated
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, self.email)
+
+    def test_post_invalid_email_shows_errors(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.post(self.url, {
+            "email": "invalid-email",
+            "password": self.password
+        })
+
+        # Should stay on form page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user_form.html")
+
+        # Form should contain an error message for email field
+        self.assertIn("email", response.context["form"].errors)
+
+        # Email should not be updated
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.email, self.email)
