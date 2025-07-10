@@ -24,7 +24,7 @@
                 <a href="{% url 'tracker:task-update' pk=task.pk%}">edit</a>
                 <a href="{% url 'tracker:task-delete' pk=task.pk%}">delete</a>
             </div>
-            <div class="small"><span class="muted">Project:</span> {{ task.project.name }}</div>
+            <div class="small"><span class="muted">Project:</span> <a href="{% url 'tracker:project-detail' pk=task.project.pk %}">{{ task.project.name }}</a></div>
         </div>
         <div>
             <div class="card summary-card d-flex-even">
