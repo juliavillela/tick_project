@@ -151,7 +151,7 @@ class UpdateEmailViewTests(TestCase):
 
 class PasswordUpdateViewTests(TestCase):
     def setUp(self):
-        self.email = "old@example.com"
+        self.email = "user@example.com"
         self.password = "Securepassword123"
         self.user = User.objects.create_user(
             email=self.email, password=self.password
@@ -226,3 +226,46 @@ class PasswordUpdateViewTests(TestCase):
         self.assertTemplateUsed(response, "user_form.html")
         # Form should contain an error message for new_password2 field
         self.assertIn("new_password2", response.context["form"].errors)
+
+class UserDeleteViewTests(TestCase):
+    def setUp(self):
+        self.email = "user@example.com"
+        self.password = "Securepassword123"
+        self.user = User.objects.create_user(
+            email=self.email, password=self.password
+        )
+        self.url = reverse("users:delete")
+
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(self.url)
+        self.assertNotEqual(response.status_code, 200)
+        self.assertRedirects(response, f"/users/login/?next={self.url}")
+
+    def test_get_form_when_logged_in(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user_form.html")
+
+    def test_post_with_valid_data_deletes_user(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.post(self.url, {
+            "password": self.password
+        })
+        # User should no longer exist
+        user_exists = User.objects.filter(pk=self.user.pk).exists()
+        self.assertFalse(user_exists)
+        # Should redirect to index
+        self.assertRedirects(response, reverse("tracker:index"))
+
+    def test_post_with_invalid_password_shows_error(self):
+        self.client.login(email=self.email, password=self.password)
+        response = self.client.post(self.url, {
+            "password": "wrongPassword"
+        })
+        # Should stay on form page
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "user_form.html")
+        # Form should contain an error message for password field
+        self.assertIn("password", response.context["form"].errors)
+
