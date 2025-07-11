@@ -298,3 +298,58 @@ def daily(request, days_ago):
     context["next"] = days_ago - 1 if days_ago > 0 else None
 
     return render(request, template, context)
+
+def weekly(request):
+    # Define the start date as 7 days ago from today
+    date_start = timezone.now().date() - timedelta(days=6)
+    date_end = timezone.now().date()
+    template = "weekly.html"
+
+    # Get all tasks marked as done by the user within the last 6 days (7 total days)
+    weekly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, days=6)
+    
+    weekly_seconds = 0 # Total seconds spent during the week
+    week_days = [] # List to hold daily summaries for each weekday
+    
+    # Iterate over each day in the past 7-day period
+    for day_index in range(7):
+        date = date_start + timedelta(days=day_index)
+        daily_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=date, days=0)
+        # Calculate total time spent in seconds for the day
+        total_seconds_spent = sum(session.duration_in_seconds() for session in daily_sessions)
+        weekly_seconds += total_seconds_spent # Add to weekly total
+        
+        # Append summary of the day to week_days list
+        week_days.append({
+            "weekday": date.strftime("%A"), # e.g., Monday, Tuesday 
+            "total_seconds_spent": total_seconds_spent/1500,  # Scaled value (for visual use)
+            "daily_time_spent_dict": timedelta_to_dict(timedelta(seconds=total_seconds_spent))
+        }) 
+
+    weekly_projects = [] # List to hold projects with time tracked during the week
+    
+    # Fetch all of the user's projects last edited this week, ordered by most recently edited
+    projects = Project.objects.filter(user = request.user, last_edited__gte=date_start).order_by('-last_edited')
+
+    # For each project, calculate total time spent this week
+    for project in projects:
+        weekly_sessions = Session.objects.by_project_and_start_date_within(project=project, date=date_start, days=6)
+        project_weekly_seconds = sum(session.duration_in_seconds() for session in weekly_sessions)
+        
+        # Only include project that were worked on during the week
+        if project_weekly_seconds > 60:
+            project.weekly_seconds = project_weekly_seconds
+            project.weekly_time_spent_dict = timedelta_to_dict(timedelta(seconds=project.weekly_seconds))
+            project.percentage = round((project.weekly_seconds/weekly_seconds)*100)
+            weekly_projects.append(project)
+
+    context = current_session_context(request)
+    context.update({
+        "weekly_time": timedelta_to_dict(timedelta(seconds=weekly_seconds)),
+        "weekly_tasks": len(weekly_tasks),
+        "week_date": f"{date_start.strftime("%A %B %d")} - {date_end.strftime("%B %d")}",
+        "week_days": week_days,
+        "projects": weekly_projects
+    })
+
+    return render(request, template, context)
