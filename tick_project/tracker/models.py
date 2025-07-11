@@ -26,7 +26,7 @@ class Project(models.Model):
         return total_seconds
     
     def sessions_by_date(self, date):
-        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date, days=0)
+        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date)
         return sessions
     
     def seconds_spent_by_date(self, date):

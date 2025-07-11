@@ -260,7 +260,7 @@ def daily(request, days_ago):
 
     # Fetch all of the user's projects, ordered by most recently edited
     projects = Project.objects.filter(user = request.user).order_by('-last_edited')
-    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date, days=0)
+    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date)
 
     daily_sessions = [] # List to collect all sessions that occurred on the target date
     daily_projects = [] # List to collect only projects that had sessions on that date
@@ -306,15 +306,15 @@ def weekly(request):
     template = "weekly.html"
 
     # Get all tasks marked as done by the user within the last 6 days (7 total days)
-    weekly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, days=6)
-    
+    weekly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, extra_days=6)
+
     weekly_seconds = 0 # Total seconds spent during the week
     week_days = [] # List to hold daily summaries for each weekday
     
     # Iterate over each day in the past 7-day period
     for day_index in range(7):
         date = date_start + timedelta(days=day_index)
-        daily_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=date, days=0)
+        daily_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=date, extra_days=0)
         # Calculate total time spent in seconds for the day
         total_seconds_spent = sum(session.duration_in_seconds() for session in daily_sessions)
         weekly_seconds += total_seconds_spent # Add to weekly total
@@ -333,7 +333,7 @@ def weekly(request):
 
     # For each project, calculate total time spent this week
     for project in projects:
-        weekly_sessions = Session.objects.by_project_and_start_date_within(project=project, date=date_start, days=6)
+        weekly_sessions = Session.objects.by_project_and_start_date_within(project=project, date=date_start, extra_days=6)
         project_weekly_seconds = sum(session.duration_in_seconds() for session in weekly_sessions)
         
         # Only include project that were worked on during the week
