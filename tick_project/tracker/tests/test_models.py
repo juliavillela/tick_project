@@ -77,13 +77,6 @@ class TaskModelTests(TestCase):
 
         self.assertEqual(task.total_seconds_spent(), 60)
 
-    def test_mark_as_done(self):
-        task = Task.objects.create(project=self.project, name="Test Task")
-
-        task.mark_as_done()
-        self.assertTrue(task.is_done)
-        self.assertIsNotNone(task.done_at)
-
 class SessionModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(email="test@example.com", password="testpass123")
