@@ -299,6 +299,7 @@ def daily(request, days_ago):
 
     return render(request, template, context)
 
+@login_required
 def weekly(request):
     # Define the start date as 7 days ago from today
     date_start = timezone.now().date() - timedelta(days=6)
