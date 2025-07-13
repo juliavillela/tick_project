@@ -296,10 +296,11 @@ def daily(request, days_ago):
     return render(request, template, context)
 
 @login_required
-def weekly(request):
+def weekly(request, weeks_ago):
     # Define the start date as 7 days ago from today
-    date_start = timezone.now().date() - timedelta(days=6)
-    date_end = timezone.now().date()
+    today = timezone.now().date()
+    date_start = today - timedelta(days=(weeks_ago * 7 + 6))
+    date_end = today - timedelta(days=(weeks_ago * 7))
     template = "weekly.html"
 
     # Fetch all tasks marked as done by the user within the last 6 days (7 total days)
@@ -363,7 +364,9 @@ def weekly(request):
         "weekly_tasks": len(weekly_tasks),
         "week_date": f"{date_start.strftime("%A %B %d")} - {date_end.strftime("%B %d")}",
         "week_days": week_days,
-        "projects": weekly_projects
+        "projects": weekly_projects,
+        "previous": weeks_ago + 1,
+        "next": weeks_ago - 1 if weeks_ago > 0 else None
     })
 
     return render(request, template, context)
