@@ -258,41 +258,37 @@ def daily(request, days_ago):
     date = timezone.now().date() - timedelta(days=days_ago)
     template = "daily.html"
 
-    # Fetch all of the user's projects, ordered by most recently edited
-    projects = Project.objects.filter(user = request.user).order_by('-last_edited')
-    today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date)
-
-    daily_sessions = [] # List to collect all sessions that occurred on the target date
-    daily_projects = [] # List to collect only projects that had sessions on that date
+    # Fetch all sessions started on this date
+    all_daily_sessions = Session.objects.by_user_and_start_date_within(
+        user=request.user, 
+        date=date
+        ).select_related("task", "task__project").order_by('start_time')
     
-    # Iterate through the user's projects to gather relevant sessions
-    for project in projects:
-        sessions = project.sessions_by_date(date)
-        daily_sessions.extend(sessions)
-        # Sum the total time spent across sessions for this project
-        daily_seconds= sum(session.duration_in_seconds() for session in sessions)
-        
-        # If time was spent, store that info on the project and add it to the list
-        if daily_seconds > 0:
-            # Attach a human-readable time dictionary to the project (e.g., {'hours': 1, 'minutes': 30})
-            project.daily_seconds = daily_seconds
-            project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=daily_seconds))
-            daily_projects.append(project)
+    # Fetch all tasks completed on this date
+    daily_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date)
+    # Calculate total seconds spent focused on this date
+    daily_seconds = sum(session.duration_in_seconds() for session in all_daily_sessions)
 
-    # Sort all sessions by their start time (earliest first)
-    daily_sessions.sort(key=lambda s: s.start_time)
-    # Sum duration of daily sessions
-    daily_time = sum(session.duration_in_seconds() for session in daily_sessions)
+    # Group sessions by project
+    sessions_by_project = {}
+    for session in all_daily_sessions:
+        project = session.task.project
+        if project not in sessions_by_project:
+            sessions_by_project[project] = []
+        sessions_by_project[project].append(session)
 
-    # Calculate what percent of work time went into each project
-    for project in daily_projects:
-        project.percentage = round((project.daily_seconds/daily_time)*100)
+    # Build project summaries
+    daily_projects = []
+    for project, project_sessions in sessions_by_project.items():
+        project.daily_seconds = sum(session.duration_in_seconds() for session in project_sessions)
+        project.daily_time_spent = timedelta_to_dict(timedelta(seconds=project.daily_seconds))
+        project.percentage = round(project.daily_seconds/daily_seconds)
 
     context = current_session_context(request)
     context["projects"] = daily_projects
-    context["sessions"] = daily_sessions
-    context["daily_tasks"] = len(today_tasks)
-    context["daily_time"] = timedelta_to_dict(timedelta(seconds=daily_time))
+    context["sessions"] = all_daily_sessions
+    context["daily_tasks"] = len(daily_tasks)
+    context["daily_time"] = timedelta_to_dict(timedelta(seconds=daily_seconds))
     context["date"] = date.strftime("%A, %B %d")
     context["previous"] = days_ago + 1
     context["next"] = days_ago - 1 if days_ago > 0 else None
