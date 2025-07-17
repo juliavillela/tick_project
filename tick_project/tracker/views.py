@@ -281,8 +281,9 @@ def daily(request, days_ago):
     daily_projects = []
     for project, project_sessions in sessions_by_project.items():
         project.daily_seconds = sum(session.duration_in_seconds() for session in project_sessions)
-        project.daily_time_spent = timedelta_to_dict(timedelta(seconds=project.daily_seconds))
-        project.percentage = round(project.daily_seconds/daily_seconds)
+        project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=project.daily_seconds))
+        project.percentage = round(project.daily_seconds/daily_seconds * 100)
+        daily_projects.append(project)
 
     context = current_session_context(request)
     context["projects"] = daily_projects
