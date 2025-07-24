@@ -4,7 +4,7 @@ from django.contrib.auth import logout, authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect
 
-from .forms import RegisterForm, EmailAuthenticationForm, EmailUpdateForm, PasswordUpdateForm, UserDeleteForm
+from .forms import RegisterForm, EmailAuthenticationForm, EmailUpdateForm, PasswordUpdateForm, UserDeleteForm, TimezoneUpdateForm
 from tracker.models import Project, Session
 
 login_redirect = 'tracker:dashboard'
@@ -75,7 +75,7 @@ def user_update_email(request):
         context = {
             "form": EmailUpdateForm(instance=request.user, user=request.user),
             "title": "Edit user email.",
-            "actioin": "Save",
+            "action": "Save",
         }
 
         return render(request, template, context)
@@ -100,7 +100,24 @@ def user_update_password(request):
         }
 
         return render(request, template, context)
-    
+
+@login_required
+def user_update_timezone(request):
+    template = "user_form.html"
+    if request.method == "POST":
+        form = TimezoneUpdateForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            updated_user = form.save()
+            return redirect("users:account")
+    else: 
+        context = {
+            "form": TimezoneUpdateForm(instance=request.user),
+            "title": "Choose a new timezone.",
+            "details": "Changing your timezone will affect how previously recorded sessions are displayed. Their times will be adjusted to reflect your new timezone.",
+            "action": "Save",
+        }
+    return render(request, template, context)
+
 @login_required
 def user_delete(request):
     template = "user_form.html"
@@ -125,3 +142,5 @@ def user_delete(request):
         context["form"] = UserDeleteForm(user=request.user)
 
         return render(request, template, context)
+    
+

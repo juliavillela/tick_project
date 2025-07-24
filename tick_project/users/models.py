@@ -1,3 +1,4 @@
+from zoneinfo import available_timezones
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -5,11 +6,19 @@ from django.utils.translation import gettext_lazy as _
 
 from .managers import CustomUserManager
 
+TIMEZONES_CHOICES = [(tz, tz) for tz in sorted(available_timezones())]
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField("email address", unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+
+    timezone = models.CharField(
+        max_length=50,
+        default="UTC",
+        choices=TIMEZONES_CHOICES,
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
