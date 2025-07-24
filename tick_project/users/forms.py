@@ -111,3 +111,9 @@ class UserDeleteForm(forms.Form):
         password = cleaned_data.get("password")
         if not self.user.check_password(password):
             self.add_error("password", "Incorrect password.")
+
+class TimezoneUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('timezone',)
+        
