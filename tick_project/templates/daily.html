@@ -1,6 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="mb-3">
+    <h3>Daily stats</h3>
+</div>
 <div class="mb-2">
     <a class="small muted link" href="{% url 'tracker:daily' previous %}">previous</a>
     {% if next is not None %}
