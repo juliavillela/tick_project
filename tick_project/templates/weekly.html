@@ -4,6 +4,12 @@
 <div class="mb-3">
     <h3>Weekly stats</h3>
 </div>
+<div class="mb-2">
+    <a class="small muted link" href="{% url 'tracker:weekly' previous %}">previous</a>
+    {% if next is not None %}
+    | <a class="small muted link" href="{% url 'tracker:weekly' next %}">next</a>
+    {% endif %}
+</div>
 
 <section class="mb-3">
     {% include "partials/_summary_card.html" with total_time=weekly_time done_tasks=weekly_tasks title=week_date %}
