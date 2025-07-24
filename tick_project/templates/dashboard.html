@@ -2,9 +2,10 @@
 
 {% block content %}
 <section class="mb-3">
-    <a href="{% url 'tracker:daily' 0 %}">
     {% include "partials/_summary_card.html" with total_time=today_time done_tasks=today_tasks title="Today" %}
-    </a>
+    <div class="small muted">
+        stats: <a href="{% url 'tracker:daily' 0 %}">daily stats</a> | <a href="{% url 'tracker:weekly' 0 %}">weekly stats</a> 
+    </div>
 </section>
 
 <section class="mb-3">
