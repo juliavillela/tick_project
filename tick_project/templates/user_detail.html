@@ -4,6 +4,7 @@
 
 <h3 class="mb-2"> My account</h3>
 <div><span class="muted">logged in as:</span> {{ user.email }}</div>
+<div><span class="muted">timezone:</span> {{user.timezone}}</div>
 <ul>
     <li><a class="link" href="{% url 'users:update-email'%}">change email</a></li>
     <li><a class="link" href="{% url 'users:update-password' %}">change password</a></li>
