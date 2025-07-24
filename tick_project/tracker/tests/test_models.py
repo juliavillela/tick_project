@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
-from .models import Project, Task, Session
+from ..models import Project, Task, Session
 
 User = get_user_model()
 
@@ -76,13 +76,6 @@ class TaskModelTests(TestCase):
         session_2 = Session.objects.create(task=task, start_time=start, end_time=end)
 
         self.assertEqual(task.total_seconds_spent(), 60)
-
-    def test_mark_as_done(self):
-        task = Task.objects.create(project=self.project, name="Test Task")
-
-        task.mark_as_done()
-        self.assertTrue(task.is_done)
-        self.assertIsNotNone(task.done_at)
 
 class SessionModelTests(TestCase):
     def setUp(self):

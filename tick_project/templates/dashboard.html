@@ -2,32 +2,9 @@
 
 {% block content %}
 <section class="mb-3">
-    <div class="card summary-card">
-        <div class="container">
-            <h3 class="text-center mb-1">Today</h3>
-            <div class="d-flex-even">
-                <div>
-                    <div class="status-title">
-                        focused for
-                    </div>
-                    <div class="status-data">
-                        <strong>
-                            {{today_time.hours|stringformat:"02d"}}:{{today_time.minutes|stringformat:"02d"}}
-                        </strong>
-                    </div>
-                </div>
-                <div>
-                    <div class="status-title">
-                        tasks
-                    </div>
-                    <div class="status-data">
-                        <strong>
-                            {{today_tasks}}
-                        </strong>
-                    </div>
-                </div>
-            </div>
-        </div>
+    {% include "partials/_summary_card.html" with total_time=today_time done_tasks=today_tasks title="Today" %}
+    <div class="small muted">
+        stats: <a href="{% url 'tracker:daily' 0 %}">daily stats</a> | <a href="{% url 'tracker:weekly' 0 %}">weekly stats</a> 
     </div>
 </section>
 

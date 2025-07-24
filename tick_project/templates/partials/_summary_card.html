@@ -1,0 +1,27 @@
+    <div class="card summary-card">
+        <div class="container">
+            <h3 class="text-center mb-1">{{title}}</h3>
+            <div class="d-flex-even">
+                <div>
+                    <div class="status-title">
+                        focused for
+                    </div>
+                    <div class="status-data">
+                        <strong>
+                            {{total_time.hours|stringformat:"02d"}}:{{total_time.minutes|stringformat:"02d"}}
+                        </strong>
+                    </div>
+                </div>
+                <div>
+                    <div class="status-title">
+                        tasks
+                    </div>
+                    <div class="status-data">
+                        <strong>
+                            {{done_tasks}}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

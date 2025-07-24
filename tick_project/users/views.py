@@ -87,7 +87,8 @@ def user_update_password(request):
         form = PasswordUpdateForm(data=request.POST, user=request.user)
         if form.is_valid():
             updated_user = form.save()
-            return redirect("users:account")
+            logout(request)
+            return redirect("users:login")
         else:
             return render(request, template, {"form": form})
     else:
@@ -103,19 +104,24 @@ def user_update_password(request):
 @login_required
 def user_delete(request):
     template = "user_form.html"
+    context = {
+        "title": "Delete your account.",
+        "details": "This action will permanently delete your account and all data associated with it.",
+        "action": "Delete",
+    }
 
     if request.method == "POST": 
-        user = request.user
-        logout(request)
-        user.delete()
-        messages.success(request, "Your account has been deleted.")
-        return redirect(logout_redirect)
+        form = UserDeleteForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            user = request.user
+            logout(request)
+            user.delete()
+            messages.success(request, "Your account has been deleted.")
+            return redirect(logout_redirect)
+        else:
+            context["form"] = form
+            return render(request, template, context)
     else:
-        context = {
-            "form": UserDeleteForm(user=request.user),
-            "title": "Delete your account.",
-            "details": "This action will permanently delete your account and all data associated with it.",
-            "action": "Delete",
-        }
+        context["form"] = UserDeleteForm(user=request.user)
 
         return render(request, template, context)

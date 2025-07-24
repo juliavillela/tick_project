@@ -1,10 +1,10 @@
 from datetime import timedelta
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
 from django.conf import settings
 
+from .managers import SessionManager, TaskManager
 from .helpers import timedelta_to_dict
 # Create your models here.
 
@@ -25,6 +25,15 @@ class Project(models.Model):
         total_seconds = sum(task.total_seconds_spent() for task in self.tasks.all())
         return total_seconds
     
+    def sessions_by_date(self, date):
+        sessions = Session.objects.by_project_and_start_date_within(project=self, date=date)
+        return sessions
+    
+    def seconds_spent_by_date(self, date):
+        sessions = self.sessions_by_date(date)
+        seconds = sum(session.duration_in_seconds() for session in sessions)
+        return seconds
+
 class Task(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="tasks")
     name = models.CharField(max_length=280)
@@ -32,6 +41,8 @@ class Task(models.Model):
     done_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     last_edited = models.DateTimeField(auto_now=True)
+
+    objects = TaskManager()
 
     def save(self, *args, **kwargs):
         # update done_at according to task.is_done 
@@ -50,28 +61,6 @@ class Task(models.Model):
     def total_seconds_spent(self):
         total_seconds = sum(session.duration_in_seconds() for session in self.sessions.all())
         return total_seconds
-
-class SessionManager(models.Manager):
-    def get_active_session(self, user):
-        active_session = self.filter(
-            task__project__user = user,
-            end_time__isnull = True
-        ).first()
-        return active_session
-
-    def end_current_session(self, user):
-        active_session = self.get_active_session(user)
-        if active_session:
-            active_session.set_end_time()
-            active_session.save()
-
-    def create_new_session(self, user, task):
-        if self.get_active_session(user):
-            raise ValidationError
-        session = self.model(task=task)
-        session.set_start_time()
-        session.save()
-        return session
 
 class Session(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name="sessions")
@@ -103,3 +92,11 @@ class Session(models.Model):
     
     def duration_dict(self):
         return timedelta_to_dict(timedelta(seconds=self.duration_in_seconds()))
+    
+    def duration_in_height_units(self):
+        """
+        Returns a float representing the session's duration 
+        normalized to height units (e.g., 1 unit = 25 minutes).
+        Used for visual representation in the UI.
+        """
+        return self.duration_in_seconds()/1500
