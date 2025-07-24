@@ -113,7 +113,7 @@ def user_update_timezone(request):
         context = {
             "form": TimezoneUpdateForm(instance=request.user),
             "title": "Choose a new timezone.",
-            "details": "Once your timezone changes, previously recorded sessions will use this new timezone.",
+            "details": "Changing your timezone will affect how previously recorded sessions are displayed. Their times will be adjusted to reflect your new timezone.",
             "action": "Save",
         }
     return render(request, template, context)
