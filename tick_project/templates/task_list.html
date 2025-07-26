@@ -24,12 +24,7 @@
 <section>
     <h3 class="mb-2">done</h3>
         {% for task in done_tasks %}
-        <div class="card card-li">
-            <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
-            <span class="small muted bold">
-                {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
-            </span>
-        </div>
+            {% include "partials/_done_task_list_item.html" with task=task %}
         {% endfor %}
 </section>
 {% endblock %}
