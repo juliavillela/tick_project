@@ -194,6 +194,9 @@ button{
     padding: .7rem .9rem;
     margin-bottom: .5rem;
     border-radius: 5px;
+}
+
+.grid-3{
     display: grid;
     grid-template-columns: min-content auto min-content;
 }
