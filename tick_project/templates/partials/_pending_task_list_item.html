@@ -1,6 +1,8 @@
-        <div class="card card-li {% if not current_session or current_session.task.pk == task.pk %} w-action {% endif %} {% if current_session.task.pk == task.pk %} active {% endif %}">
+        <div class="card card-li">
             {% if current_session and current_session.task.pk == task.pk %}
             <div class="active-icon"></div>
+            {% else %}
+            <div></div>
             {% endif %}
             <div>
                 <a href="{% url 'tracker:task-detail' task.pk%}">
@@ -14,5 +16,7 @@
             </div>
             {% if not current_session or current_session.task.pk == task.pk %}
             <a href="{% url 'tracker:session-start' task.pk %}">▶</a>
+            {% else %}
+            <div></div>
             {% endif %}
         </div>

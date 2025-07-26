@@ -1,5 +1,6 @@
 {% for project in projects %}
     <div class="card card-li">
+        <div></div>
         <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
         <span class="small muted bold">
             {{project.total_time_spent_dict.hours|stringformat:"02d"}}:{{project.total_time_spent_dict.minutes|stringformat:"02d"}}

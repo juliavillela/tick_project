@@ -194,24 +194,17 @@ button{
     padding: .7rem .9rem;
     margin-bottom: .5rem;
     border-radius: 5px;
-}
-
-.card-li.w-action{
     display: grid;
-    grid-template-columns: auto min-content;
-}
-
-.card-li.active{
     grid-template-columns: min-content auto min-content;
 }
 
-.card-li.active .active-icon{
+.card-li .active-icon{
     width: 10px;
     height: 10px;
     box-shadow: 1px 1px var(--color-accent);
     background-color: var(--color-accent);
     border-radius: 100%;
-    margin: 0.3rem .3rem;
+    margin: 0.3rem 0.3rem 0 0rem;
 }
 
 .focus-button{
