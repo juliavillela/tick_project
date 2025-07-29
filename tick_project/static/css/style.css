@@ -220,35 +220,46 @@ button{
     margin-bottom: .6rem;
 }
 
-.duration-representation{
-    border-left: solid 3px var(--color-accent);
-    padding-left: .6rem;
-}
-
 .grid-min-content-auto{
     display: grid;
     grid-template-columns: min-content auto;
 }
 
-/* ------------ COMPONENTS: PIE-CHART ------------ */
-.pie-chart{
-    --size: 20px;
-    --percentage: 0; /* to be set inline */
-    --pie-color: var(--text-color-muted);
+/* ------------ COMPONENTS: GAPHICS ------------ */
 
-    width: var(--size);
-    height: var(--size);
-    border-radius: 50%;
-    border: solid 2px var(--pie-color);
-    background: conic-gradient(var(--pie-color) calc(var(--percentage) * 1%), var(--bg-color-accent) 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    color: var(--text-color);
-    font-family: inherit;
-    position: relative;
+.pie-chart {
+  transform: rotate(-90deg); /* so progress starts at top */
+}
+
+/* created by the js script */
+.pie-chart .bg { 
+  fill: none;
+  stroke: var(--bg-color-accent-dark);
+  stroke-width: 8;
+}
+/* created by the js script */
+.pie-chart .fg {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 8;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.duration-bar{
+    background-color: var(--color-accent);
     margin-right: .6rem;
+}
+
+.duration-bar.vertical{
+    width: 8px; /* height is set through js script */
+}
+
+.duration-bar.vertical.thin{
+    width: 3px;
+}
+
+.duration-bar.horizontal{
+    height: 8px; /* width is set through js script */
 }
 
 /* ------------ COMPONENTS: TIMER ------------ */

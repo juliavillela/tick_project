@@ -344,7 +344,7 @@ def weekly(request, weeks_ago):
 
         week_days.append({
             "weekday": date.strftime("%A"), # e.g., Monday, Tuesday 
-            "total_seconds_spent": total_seconds_spent/1500,  # Scaled value (for visual use)
+            "total_seconds_spent": total_seconds_spent,
             "daily_time_spent_dict": timedelta_to_dict(timedelta(seconds=total_seconds_spent))
         })
 

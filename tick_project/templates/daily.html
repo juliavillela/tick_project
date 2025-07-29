@@ -19,7 +19,7 @@
     <h3 class="mb-2">Projects</h3> 
     {% for project in projects %}
         <div class="card card-li grid-min-content-auto">
-            <div class="pie-chart" style="--percentage: {{project.percentage}};">
+            <div class="pie-chart" data-percentage={{project.percentage}}>
             </div>
             <div>
                 <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
@@ -39,7 +39,7 @@
             <div>
                 <span class="muted">{{session.start_time|time}}</span>
                 <div class="card card-li grid-min-content-auto">
-                    <div class="duration-representation" style="height:{{session.duration_in_height_units}}rem;">
+                    <div class="duration-bar vertical thin" data-duration={{session.duration_in_seconds}}>
                     </div>
                     <div>
                         {{session.task.name}}
