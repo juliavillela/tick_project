@@ -67,7 +67,15 @@ def project_delete(request, pk):
         context["project"] = project
 
         return render(request, "project_delete_form.html", context)
-    
+
+@login_required
+def project_archive(request, pk):
+    project = get_object_or_404(Project, pk=pk, user = request.user)
+    project.active = False
+    project.save()
+    return redirect("tracker:project-detail", pk=pk)
+
+
 @login_required
 def create_task_for_project(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
