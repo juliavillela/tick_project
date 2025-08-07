@@ -11,6 +11,7 @@ from .helpers import timedelta_to_dict
 class Project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
+    active = models.BooleanField(default=True)
     color = models.CharField(max_length=7, default="#C3C3C3")
     created_at = models.DateTimeField(auto_now_add=True)  
     last_edited = models.DateTimeField(auto_now=True)  
