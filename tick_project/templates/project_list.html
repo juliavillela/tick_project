@@ -9,7 +9,11 @@
     </div>
 </section>
 <section class="mb-3">
-    {% include "partials/_project_list.html" with projects=projects %}
+    <h3 class="mb-2">Active</h3>
+    {% include "partials/_project_list.html" with projects=active_projects %}
 </section>
-
+<section class="mb-3">
+    <h3 class="mb-2">Archived</h3>
+    {% include "partials/_project_list.html" with projects=archived_projects %}
+</section>
 {% endblock %}

@@ -9,8 +9,8 @@ from ..helpers import current_session_context
 def project_list(request):
     context = current_session_context(request)
 
-    context["projects"] = Project.objects.filter(user=request.user).order_by('-last_edited')
-
+    context["active_projects"] = Project.objects.filter(user=request.user, active=True).order_by('-last_edited')
+    context["archived_projects"] = Project.objects.filter(user=request.user, active=False).order_by('-last_edited')
     return render(request, "project_list.html", context)
 
 @login_required
