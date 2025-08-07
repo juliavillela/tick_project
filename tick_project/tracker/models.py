@@ -84,6 +84,11 @@ class Session(models.Model):
     def set_end_time(self):
         self.end_time = timezone.now()
 
+    def set_custom_duration(self, seconds):
+        if seconds <= 0:
+            raise ValueError("Duration must be a positive number of seconds.")
+        self.end_time = self.start_time + timedelta(seconds=seconds)
+
     def duration_in_seconds(self):
         if self.start_time is None or self.end_time is None:
             return 0
