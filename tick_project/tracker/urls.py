@@ -24,6 +24,7 @@ urlpatterns = [
     path("project/<int:pk>/delete/", views.project_delete, name="project-delete"),
     path("project/<int:pk>/create-task/", views.create_task_for_project, name="project-create-task"),
     path("project/<int:pk>/archive/", views.project_archive, name="project-archive"),
+    path("project/<int:pk>/unarchive/", views.project_unarchive, name="project-unarchive"),
 
     path("daily/<int:days_ago>/", views.daily, name="daily"),
     path("weekly/<int:weeks_ago>/", views.weekly, name="weekly"),
