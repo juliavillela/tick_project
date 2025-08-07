@@ -2,11 +2,11 @@
 
 {% block content %}
 <h3 class="mb-3">Delete project</h3>
-<p class="mb-2">Are you sure you want to delete the task: <strong>{{ project.name }}</strong>?</p>
+<p class="mb-2">Are you sure you want to delete the project: <strong>{{ project.name }}</strong>?</p>
 <form method="post" class="form">
     {% csrf_token %}
     <button type="submit" class="button">delete</button>
-    <button class="button" onclick="history.back()">cancel</button>
+    <a class="button" onclick="history.back()">cancel</a>
   </form>
 
 {% endblock %}
