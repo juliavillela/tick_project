@@ -1,8 +1,8 @@
-from django.forms import ModelForm
+from django import forms
 
 from .models import Task, Project
 
-class TaskForm(ModelForm):
+class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ["project", "name", "is_done"]
@@ -30,7 +30,7 @@ class TaskForm(ModelForm):
             elif name == "is_done":
                 field.widget.attrs.update({'class': 'form-check-input'})
 
-class ProjectForm(ModelForm):
+class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ["name"]
@@ -38,3 +38,20 @@ class ProjectForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["name"].widget.attrs.update({'class': 'form-control'})
+
+class SessionReviewForm(forms.Form):
+    task_name = forms.CharField(label="Task name", max_length=255)
+    duration_minutes = forms.IntegerField(label="Duration (minutes)", min_value=1)
+    mark_done = forms.BooleanField(label="Mark task as done", required=False)
+
+    def __init__(self, *args, **kwargs):
+        session = kwargs.pop("session")
+        super().__init__(*args, **kwargs)
+        #set initial values
+        self.fields["task_name"].initial = session.task.name
+        self.fields["duration_minutes"].initial = session.duration_in_seconds() // 60
+        self.fields["mark_done"].initial = session.task.is_done
+
+        self.fields["task_name"].widget.attrs.update({'class': 'form-control'})
+        self.fields["duration_minutes"].widget.attrs.update({'class': 'form-control'})
+        self.fields["mark_done"].widget.attrs.update({'class': 'form-check-input'})
