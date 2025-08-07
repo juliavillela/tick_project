@@ -15,6 +15,7 @@ urlpatterns = [
     
     path("track/<int:pk>/", views.session_start, name="session-start"),
     path("track/session/<int:pk>", views.session_active, name="session-active"),
+    path("track/session/<int:pk>/review/", views.session_review, name="session-review"),
     
     path("projects/", views.project_list, name="projects"),
     path("project/<int:pk>", views.project_detail, name="project-detail"),

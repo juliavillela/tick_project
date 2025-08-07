@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from ..models import Task, Session
+from ..forms import SessionReviewForm
 
 @login_required
 def session_start(request, pk):
@@ -37,7 +38,7 @@ def session_active(request, pk):
         session.set_end_time()
         session.save()
 
-        return redirect("tracker:task-detail", pk=task.pk)
+        return redirect("tracker:session-review", pk=session.pk)
     else:
         template = "track.html"
         context = {
@@ -46,3 +47,30 @@ def session_active(request, pk):
         }
         return render(request, template, context)
     
+def session_review(request, pk):
+    session = get_object_or_404(Session, pk=pk, task__project__user=request.user)
+    template = "session_form.html"
+    context = {}
+    if request.method == "POST":
+        form = SessionReviewForm(request.POST, session=session)
+        if form.is_valid():
+            # update task
+            task = session.task
+            task.name = form.cleaned_data["task_name"]
+            task.is_done = form.cleaned_data["mark_done"]
+            task.save()
+
+            # update session
+            minutes = form.cleaned_data["duration_minutes"]
+            session.set_custom_duration(minutes * 60)
+            session.save()
+
+            return redirect("tracker:task-detail", pk=task.pk)
+        else:
+            print("Form is not valid:", form.errors)
+            context["form"] = form
+            return render(request, template, context)
+
+    else:
+        context["form"] = SessionReviewForm(session=session)
+        return render(request, template, context)
