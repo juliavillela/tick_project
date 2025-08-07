@@ -10,6 +10,7 @@
             {{project.name}}
             {% if not project.active %}
              (Archived)
+            {% endif %}
         </h3>
         <div class="float-end small">
             {% if project.active %}
@@ -46,7 +47,9 @@
         </div>
     </div>
     <div>
+        {% if project.active %}
         <a class="button" href="{% url 'tracker:project-create-task' pk=project.pk %}">create task</a>
+        {% endif %}
     </div>
 </section>
 
