@@ -8,12 +8,19 @@
     <div class="mb-2">
         <h3 class="mb-1">
             {{project.name}}
+            {% if not project.active %}
+             (Archived)
         </h3>
         <div class="float-end small">
-            <a href="{% url 'tracker:project-update' project.pk %}">edit</a>
+            {% if project.active %}
+            <a href="{% url 'tracker:project-update' project.pk %}">edit</a> |
+            <a href="{% url 'tracker:project-archive' project.pk %}">archive</a>
+            {% else %}
+            <a href="{% url 'tracker:project-unarchive' project.pk %}">unarchive</a> |
             <a href="{% url 'tracker:project-delete' project.pk %}">delete</a>
+            {% endif %}
         </div>
-        <div class="small"><span class="muted">Created at:</span> {{ project.created_at|date }}</div>
+        <div class="small"><span class="muted">Created at:</span> {{ project.created_at|date }}</div>        
     </div>
     <div class="mb-2">
         <div class="card summary-card d-flex-even">
