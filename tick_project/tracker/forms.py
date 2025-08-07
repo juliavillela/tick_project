@@ -13,9 +13,9 @@ class TaskForm(forms.ModelForm):
 
         super().__init__(*args, **kwargs)
 
-        # Filter project choices by user
+        # Filter project choices by user and only active projects
         if user:
-            self.fields["project"].queryset = user.project_set.all()
+            self.fields["project"].queryset = user.project_set.filter(active=True)
 
         # If a specific project is passed, remove field and use it in view
         if project:
