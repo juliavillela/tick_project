@@ -29,9 +29,9 @@ def dashboard(request):
     today = timezone.now().date()
 
     # Fetch user-specific data
-    projects = Project.objects.filter(user = request.user).order_by('-last_edited')
+    projects = Project.objects.filter(user=request.user, active=True).order_by('-last_edited')
     today_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=today)
-    pending_tasks = Task.objects.by_user_and_is_pending(user=request.user)
+    pending_tasks = Task.objects.by_user_and_is_active(user=request.user)
     today_sessions = Session.objects.by_user_and_start_date_within(user=request.user, date=today)
 
     # Sum duration of today's sessions

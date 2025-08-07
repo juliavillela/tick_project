@@ -46,10 +46,15 @@ class SessionManager(Manager):
             )
 
 class TaskManager(Manager):
-    def by_user_and_is_pending(self, user):
+    def by_user_and_is_active(self, user, is_done=False):
+        """
+        Fetch tasks that belong to an active user's project. 
+        Optional parameter `is_done` defaults to False to return pending tasks.
+        """
         return self.filter(
-            is_done = False,
-            project__user = user
+            is_done = is_done,
+            project__user = user,
+            project__active = True
         ).order_by('-last_edited')
     
     def by_user_and_done_date_within(self, user, date, extra_days=0):

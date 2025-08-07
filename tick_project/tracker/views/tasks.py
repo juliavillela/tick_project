@@ -9,15 +9,8 @@ from ..helpers import current_session_context
 def task_list(request):
     context = current_session_context(request)
 
-    context["pending_tasks"] = Task.objects.filter(
-        project__user=request.user,
-        is_done=False  # pending tasks
-    ).order_by('-last_edited')  # newest edited first
-    
-    context["done_tasks"] = Task.objects.filter(
-        project__user=request.user,
-        is_done=True
-    ).order_by('-last_edited')  # newest edited first
+    context["pending_tasks"] = Task.objects.by_user_and_is_active(request.user,is_done=False)
+    context["done_tasks"] = Task.objects.by_user_and_is_active(request.user, is_done=True)
 
     return render(request, "task_list.html", context)
 
