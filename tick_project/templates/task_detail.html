@@ -7,24 +7,20 @@
     <section class="mb-3">
         <div class="mb-2">
             <h3 class="mb-1">
-                <span class="task-icon">
-                    {% if task.is_done %}
-                    ●
-                    {% else %}
-                        {% if task.total_seconds_spent == 0 %}
-                        ○
-                        {% else %}
-                        ◔
-                        {% endif %}
-                    {% endif %}
-                </span>
                 {{task.name}}
             </h3>
             <div class="float-end small">
-                <a href="{% url 'tracker:task-update' pk=task.pk%}">edit</a>
+                <a href="{% url 'tracker:task-update' pk=task.pk%}">edit</a> |
                 <a href="{% url 'tracker:task-delete' pk=task.pk%}">delete</a>
             </div>
-            <div class="small"><span class="muted">Project:</span> <a href="{% url 'tracker:project-detail' pk=task.project.pk %}">{{ task.project.name }}</a></div>
+            <div class="small d-flex">
+                {% if task.project.active %}
+                <span class="material-symbols-outlined muted icon">folder_open</span>
+                {% else %}
+                <span class="material-symbols-outlined muted icon">inventory_2</span>
+                {% endif %}
+                <a href="{% url 'tracker:project-detail' pk=task.project.pk %}">{{ task.project.name }}</a>
+            </div>
         </div>
         <div>
             <div class="card summary-card d-flex-even">

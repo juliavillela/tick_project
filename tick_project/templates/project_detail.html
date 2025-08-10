@@ -6,11 +6,13 @@
 </div>
 <section class="mb-3">
     <div class="mb-2">
-        <h3 class="mb-1">
-            {{project.name}}
-            {% if not project.active %}
-             (Archived)
+        <h3 class="mb-1 d-flex">
+            {% if project.active %}
+            <span class="material-symbols-outlined muted mr-1">folder_open</span>
+            {% else %}
+            <span class="material-symbols-outlined muted mr-1">inventory_2</span>
             {% endif %}
+            {{project.name}}
         </h3>
         <div class="float-end small">
             {% if project.active %}

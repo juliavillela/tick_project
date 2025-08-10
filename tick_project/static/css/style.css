@@ -55,6 +55,10 @@ button{
     margin-bottom: 1.3rem;
 }
 
+.mr-1{
+    margin-right: .3rem;
+}
+
 .p-1{
     padding: .6rem;
 }
@@ -81,6 +85,10 @@ button{
 
 .float-end{
     float: inline-end;
+}
+
+.d-flex{
+    display: flex;
 }
 
 .d-flex-even{
@@ -176,7 +184,7 @@ button{
 }
 
 .status-title{
-    font-size: 14px;
+    font-size: .7rem;
     color: var(--text-color-muted);
     text-align: center;
 }
@@ -191,7 +199,7 @@ button{
 
 .card-li{
     list-style-type: none;
-    padding: .7rem .9rem;
+    padding: .6rem .9rem;
     margin-bottom: .5rem;
     border-radius: 5px;
 }
@@ -201,13 +209,21 @@ button{
     grid-template-columns: min-content auto min-content;
 }
 
+.grid-3 .icon{
+    margin-right:.3rem;
+}
+.grid-3 div{
+    display: flex;
+    align-items: center;
+}
+
 .card-li .active-icon{
     width: 10px;
     height: 10px;
     box-shadow: 1px 1px var(--color-accent);
     background-color: var(--color-accent);
     border-radius: 100%;
-    margin: 0.3rem 0.3rem 0 0rem;
+    margin: 0rem 0.3rem 0 0rem;
 }
 
 .focus-button{
