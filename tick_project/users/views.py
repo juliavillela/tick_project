@@ -12,7 +12,7 @@ logout_redirect = 'tracker:index'
 User = get_user_model()
 
 def register(request):
-    template = "register.html"
+    template = "users/register.html"
 
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -32,7 +32,7 @@ def register(request):
         return render(request, template, context)
 
 def login_view(request):
-    template = "login.html"
+    template = "users/login.html"
     if request.method == "POST":
         form = EmailAuthenticationForm(request, data=request.POST)
         if form.is_valid():
@@ -59,11 +59,11 @@ def user_detail(request):
     context = {
         "user": request.user
     }
-    return render(request, "user_detail.html", context)
+    return render(request, "users/detail.html", context)
 
 @login_required
 def user_update_email(request):
-    template = "user_form.html"
+    template = "users/form.html"
     if request.method == "POST":
         form = EmailUpdateForm(request.POST, instance=request.user, user=request.user)
         if form.is_valid():
@@ -82,7 +82,7 @@ def user_update_email(request):
     
 @login_required
 def user_update_password(request):
-    template = "user_form.html"
+    template = "users/form.html"
     if request.method == "POST":
         form = PasswordUpdateForm(data=request.POST, user=request.user)
         if form.is_valid():
@@ -103,7 +103,7 @@ def user_update_password(request):
 
 @login_required
 def user_update_timezone(request):
-    template = "user_form.html"
+    template = "users/form.html"
     if request.method == "POST":
         form = TimezoneUpdateForm(data=request.POST, instance=request.user)
         if form.is_valid():
@@ -120,7 +120,7 @@ def user_update_timezone(request):
 
 @login_required
 def user_delete(request):
-    template = "user_form.html"
+    template = "users/form.html"
     context = {
         "title": "Delete your account.",
         "details": "This action will permanently delete your account and all data associated with it.",
