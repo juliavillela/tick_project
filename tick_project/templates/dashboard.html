@@ -29,6 +29,14 @@
 <section>
     <a class="float-end small" href="{% url 'tracker:projects' %}">see all</a>
     <h3 class="mb-2">Projects</h3> 
-        {% include "partials/_project_list.html" with projects=projects %}
+    {% for project in projects %}
+        {% include "partials/_project_list_item.html" with project=project %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You don't have any active projects.
+            </div>
+        </div>
+    {% endfor %}
 </section>
 {% endblock %}

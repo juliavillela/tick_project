@@ -10,10 +10,27 @@
 </section>
 <section class="mb-3">
     <h3 class="mb-2">Active</h3>
-    {% include "partials/_project_list.html" with projects=active_projects %}
+    {% for project in active_projects %}
+        {% include "partials/_project_list_item.html" with project=project %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You don't have any active projects.
+            </div>
+        </div>
+    {% endfor %}
 </section>
+
 <section class="mb-3">
     <h3 class="mb-2">Archived</h3>
-    {% include "partials/_project_list.html" with projects=archived_projects %}
+    {% for project in archived_projects %}
+        {% include "partials/_project_list_item.html" with project=project %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You don't have any archived projects.
+            </div>
+        </div>
+    {% endfor %}
 </section>
 {% endblock %}
