@@ -13,7 +13,7 @@ def session_start(request, pk):
     current_session = Session.objects.get_active_session(request.user)
     if current_session:
         if current_session.task != task:
-            messages.error(request, f"You are already tracking a session for '{current_session.task.name}', please finish it before starting another one.")
+            messages.error(request, f"You are already tracking a session for a different task, please finish it before starting a new one.")
         return redirect("tracker:session-active", pk=current_session.pk)
     
     # Create a new session for task

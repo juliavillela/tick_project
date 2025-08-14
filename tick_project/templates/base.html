@@ -39,11 +39,13 @@
 </header>
 
 {% if messages %}
-  <ul class="messages">
+  <div id="messages">
+    <button class="float-end" onclick="hideMessages(this.parentElement)">&#x2715;</button>
     {% for message in messages %}
-      <li class="alert alert-{{ message.tags }}">{{ message }}</li>
+      <div class="alert alert-{{ message.tags }} small">{{ message }}</div>
     {% endfor %}
-  </ul>
+    
+  </div>
 {% endif %}
 
 <main class="d-flex-even">

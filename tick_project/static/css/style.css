@@ -323,5 +323,24 @@ button{
 
 .timer-button{
     font-size: 3rem;
+}
 
+/* ------------ COMPONENTS: TOAST MESSAGES ------------ */
+div#messages{
+    margin: 0;
+    list-style: none;
+    background-color: var(--bg-color);
+    box-shadow: 1px 1px 3px 0px #0000002e;
+    position: absolute;
+    z-index: 3;
+    top: 4rem;
+    right: -320px;
+    width: 300px;
+    padding: .3rem;
+    transition-duration: .5s;
+    transition-timing-function: ease-out ;
+}
+
+.alert{
+    padding: .6rem;
 }

@@ -3,11 +3,18 @@
  document.addEventListener("DOMContentLoaded", () => {
   const timerElement = document.getElementById("timer");
   const startTime = timerElement?.dataset.startTime || 0;
-
+  
   if (startTime != 0) {
     startTimer(startTime);
   }
-
+  
+  const messagesContainer = document.getElementById("messages")
+  if (messagesContainer){
+    // show after 500ms
+    setTimeout(() => displayMessages(messagesContainer), 100);
+    setTimeout(() => hideMessages(messagesContainer), 5000);
+  }
+  
   renderGraphs();
 });
 
@@ -87,4 +94,12 @@ function renderBars(){
             bar.style.width = duration_in_rem
         }
     });
+}
+
+function displayMessages(container){
+  container.style.right = "1rem";
+}
+
+function hideMessages(container){
+  container.style.right = "-320px"
 }
