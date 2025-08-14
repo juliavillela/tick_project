@@ -22,7 +22,7 @@ def dashboard(request):
         - List of recent pending tasks
         - List of recent projects
     """
-    template = "dashboard.html"
+    template = "tracker/dashboard.html"
     context = current_session_context(request)
 
     # Get date reference
