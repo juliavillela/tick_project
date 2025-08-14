@@ -44,9 +44,11 @@
   </ul>
 {% endif %}
 
-<main class="container">
+<main class="d-flex-even">
+    <div class="main-container">
     {% block content %}
     {% endblock %}
+    </div>
 </main>
 
 {% block script %}
