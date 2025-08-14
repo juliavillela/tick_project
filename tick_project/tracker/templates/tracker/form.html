@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h3 class="mb-3">{{title}}</h3>
+<h3 class="mb-3">{{title|safe}}</h3>
 {% if details %}
-<p class="mb-2 muted">{{details}}</p>
+<p class="mb-2">{{details|safe}}</p>
 {% endif %}
 <form method="post" class="form">
     {% csrf_token %}
