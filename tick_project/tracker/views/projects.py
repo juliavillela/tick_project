@@ -26,6 +26,16 @@ def project_detail(request, pk):
 
 @login_required
 def project_create(request):
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Create new project",
+            "action": "Save",
+        }
+    )
+
     if request.method == "POST":
         form = ProjectForm(request.POST)
         if form.is_valid():
@@ -33,40 +43,61 @@ def project_create(request):
             project.user = request.user
             project.save()
             return redirect("tracker:project-detail", pk=project.pk)
+        else:
+            context["form"] = form
+            return render(request, template, context)
     else:
-        context = current_session_context(request)
         context["form"] = ProjectForm()
 
-        return render(request, "project_form.html", context)
+        return render(request, template, context)
 
 @login_required
 def project_update(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
+    
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Edit project",
+            "action": "Save",
+        }
+    )
 
     if request.method == "POST":
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
             project.save()
             return redirect("tracker:project-detail", pk=project.pk)
+        else:
+            context["form"] = form
+            return render(request, template, context)
+        
     else:
-        context = current_session_context(request)
         context["form"] = ProjectForm(instance=project)
-
-        return render(request, "project_form.html", context)
+        return render(request, template, context)
 
 @login_required
 def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
 
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Delete project",
+            "details": f'If you delete <strong>{project.name}</strong>, all related tasks and recorded sessions will be permanently removed. <strong>This cannot be undone.</strong> Are you sure you want to continue?',
+            "action": "Delete",
+        }
+    )
+
     if request.method == "POST":
         project.delete()
         return redirect("tracker:projects")
     else:
-        context = current_session_context(request)
-
-        context["project"] = project
-
-        return render(request, "project_delete_form.html", context)
+        return render(request, template, context)
 
 @login_required
 def project_archive(request, pk):
@@ -85,7 +116,15 @@ def project_unarchive(request, pk):
 @login_required
 def create_task_for_project(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
-
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": f'Create task in project <strong>{project.name}</strong>',
+            "action": "Save",
+        }
+    )
     if request.method == "POST":
         form = TaskForm(request.POST, user=request.user, project=project)
         if form.is_valid():
@@ -93,10 +132,9 @@ def create_task_for_project(request, pk):
             task.project = project
             task.save()
             return redirect("tracker:project-detail", pk=project.pk)
-
-    else:
-        context = current_session_context(request)
+        else:
+            context["form"] = form
+            return render(request, template, context)
+    else: 
         context["form"] = TaskForm(project=project)
-        context["project"] = project
-
-        return render(request, "task_form.html", context)
+        return render(request, template, context)
