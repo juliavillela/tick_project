@@ -16,17 +16,26 @@ def task_list(request):
 
 @login_required
 def task_create(request):
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Create new task",
+            "action": "Save",
+        }
+    )
+
     if request.method == "POST":
         form = TaskForm(request.POST, user=request.user)
         if form.is_valid():
             task = form.save()
             return redirect("tracker:tasks")
+        else:
+            context["form"] = form
+            return render(request, template, context)
     else:
-        template = "task_form.html"
-
-        context = current_session_context(request)
         context["form"] = TaskForm(user=request.user),
-        
         return render(request,template, context)
 
 @login_required    
@@ -46,32 +55,46 @@ def task_detail(request, pk):
 def task_update(request, pk):
     task = get_object_or_404(Task, pk=pk, project__user=request.user)
 
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Edit task",
+            "action": "Save",
+        }
+    )
+
     if request.method == "POST":
         form = TaskForm(request.POST, user=request.user, instance=task)
         if form.is_valid():
             task = form.save()
             return redirect("tracker:task-detail", pk=task.pk)
+        else:
+            context["form"] = form
+            return render(request, template, context)
     else:
-        context = current_session_context(request)
-
-        template = "task_form.html"
         
         context["form"] = TaskForm(user=request.user, instance=task),
-
         return render(request,template, context)
 
 @login_required   
 def task_delete(request, pk):
     task = get_object_or_404(Task, pk=pk, project__user=request.user)
-
+    template = "tracker/form.html"
+    
+    context = current_session_context(request)
+    context.update(
+        {
+            "title": "Delete task",
+            "details": f"If you delete task <strong>{task.name}</strong> in project <strong>{task.project.name}</strong>, all recorded sessions will be removed. <strong>Are you sure you want to proceed?</strong>",
+            "action": "Delete",
+        }
+    )
     if request.method == "POST":
         task.delete()
         return redirect("tracker:tasks")
     else: 
-        context = current_session_context(request)   
-        template = "task_delete_form.html"
-
         context["task"] = task
-        
         return render(request, template, context)
     
