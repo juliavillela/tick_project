@@ -11,7 +11,7 @@ def project_list(request):
 
     context["active_projects"] = Project.objects.filter(user=request.user, active=True).order_by('-last_edited')
     context["archived_projects"] = Project.objects.filter(user=request.user, active=False).order_by('-last_edited')
-    return render(request, "project_list.html", context)
+    return render(request, "tracker/project_list.html", context)
 
 @login_required
 def project_detail(request, pk):
@@ -22,7 +22,7 @@ def project_detail(request, pk):
     context["pending_tasks"] = project.tasks.filter(is_done=False).order_by('-last_edited')
     context["done_tasks"] = project.tasks.filter(is_done=True).order_by('-last_edited')
     
-    return render(request, "project_detail.html", context)
+    return render(request, "tracker/project_detail.html", context)
 
 @login_required
 def project_create(request):
