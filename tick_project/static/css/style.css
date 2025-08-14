@@ -171,6 +171,34 @@ button{
     color: var(--text-color-muted);
 }
 
+input[type="checkbox"]{
+    appearance: none;       /* Remove default styling */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 18px;             /* Size */
+    height: 18px;
+    border: 1px solid var(--text-color-muted);
+    background-color: var(--bg-color-accent); /* Background */
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--text-color-muted); /* Green background when checked */
+  border-color: var(var(--text-color-muted));
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✕";
+  color: var(--bg-color);
+  font-weight: bold;
+  position: absolute;
+  left: 2px;
+  font-size: 16px;
+}
+
 /* ------------ COMPONENTS: NAVBAR ------------ */
 
 .navbar{
