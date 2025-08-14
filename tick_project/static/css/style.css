@@ -91,6 +91,11 @@ button{
     display: flex;
 }
 
+.d-flex-between{
+    display: flex;
+    justify-content: space-between;
+}
+
 .d-flex-even{
     display: flex;
     justify-content: space-evenly;
