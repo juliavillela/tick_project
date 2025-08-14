@@ -17,7 +17,9 @@
       </div>
     {% endfor %}
     <button type="submit" class="button">{{action}}</button>
+    {% if not disable_cancel %}
     <a class="button" onclick="history.back()">cancel</a>
+    {% endif %}
   </form>
 
 {% endblock %}
