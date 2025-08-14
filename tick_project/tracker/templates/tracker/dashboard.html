@@ -2,7 +2,7 @@
 
 {% block content %}
 <section class="mb-3">
-    {% include "partials/_summary_card.html" with total_time=today_time done_tasks=today_tasks title="Today" %}
+    {% include "tracker/partials/_summary_card.html" with total_time=today_time done_tasks=today_tasks title="Today" %}
     
     <div class="small muted d-flex-align-end gap-1">
         <span class="d-flex-align-end">
@@ -17,7 +17,7 @@
     <a class="float-end small" href="{% url 'tracker:tasks' %}">see all</a>
     <h3 class="mb-2">Tasks</h3> 
     {% for task in tasks %}
-        {% include "partials/_pending_task_list_item.html" with task=task current_session=current_session %}
+        {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted mb-3">
@@ -35,7 +35,7 @@
     <a class="float-end small" href="{% url 'tracker:projects' %}">see all</a>
     <h3 class="mb-2">Projects</h3> 
     {% for project in projects %}
-        {% include "partials/_project_list_item.html" with project=project %}
+        {% include "tracker/partials/_project_list_item.html" with project=project %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted">
