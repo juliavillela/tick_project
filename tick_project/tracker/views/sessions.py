@@ -49,8 +49,15 @@ def session_active(request, pk):
     
 def session_review(request, pk):
     session = get_object_or_404(Session, pk=pk, task__project__user=request.user)
-    template = "session_form.html"
-    context = {}
+
+    template = "tracker/form.html"
+
+    context = {
+            "title": "Review session",
+            "action": "Save",
+            "disable_cancel": True,
+        }
+    
     if request.method == "POST":
         form = SessionReviewForm(request.POST, session=session)
         if form.is_valid():
@@ -67,7 +74,6 @@ def session_review(request, pk):
 
             return redirect("tracker:task-detail", pk=task.pk)
         else:
-            print("Form is not valid:", form.errors)
             context["form"] = form
             return render(request, template, context)
 
