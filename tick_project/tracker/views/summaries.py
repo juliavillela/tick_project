@@ -54,7 +54,7 @@ def daily(request, days_ago):
     """
     # Calculate the target date by subtracting `days_ago` from today
     date = timezone.now().date() - timedelta(days=days_ago)
-    template = "daily.html"
+    template = "tracker/summary_daily.html"
 
     # Fetch all sessions started on this date
     all_daily_sessions = Session.objects.by_user_and_start_date_within(
@@ -100,7 +100,7 @@ def weekly(request, weeks_ago):
     today = timezone.now().date()
     date_start = today - timedelta(days=(weeks_ago * 7 + 6))
     date_end = today - timedelta(days=(weeks_ago * 7))
-    template = "weekly.html"
+    template = "tracker/summary_weekly.html"
 
     # Fetch all tasks marked as done by the user within the last 6 days (7 total days)
     weekly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, extra_days=6)
