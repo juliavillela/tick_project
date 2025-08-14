@@ -3,8 +3,13 @@
 {% block content %}
 <section class="mb-3">
     {% include "partials/_summary_card.html" with total_time=today_time done_tasks=today_tasks title="Today" %}
-    <div class="small muted">
-        stats: <a href="{% url 'tracker:daily' 0 %}">daily stats</a> | <a href="{% url 'tracker:weekly' 0 %}">weekly stats</a> 
+    
+    <div class="small muted d-flex-align-end gap-1">
+        <span class="d-flex-align-end">
+            <span class="material-symbols-outlined">bar_chart</span>
+            stats:
+        </span>
+        <a href="{% url 'tracker:daily' 0 %}">daily</a> | <a href="{% url 'tracker:weekly' 0 %}">weekly</a> 
     </div>
 </section>
 

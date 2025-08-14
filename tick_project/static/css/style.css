@@ -96,6 +96,15 @@ button{
     justify-content: space-evenly;
 }
 
+.d-flex-align-end{
+    display: flex;
+    align-items: self-end;
+}
+
+.gap-1{
+    gap:  .3rem
+}
+
 .text-center{
     text-align: center;
 }
