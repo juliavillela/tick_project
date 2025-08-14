@@ -18,12 +18,14 @@
         <div>
           {% if request.user.is_authenticated%}
               {% if current_session %}
-                <a class="navbar-brand" href="{% url 'tracker:session-active' pk=current_session.pk %}">
-                  tick
-                  <span id="timer" class="muted" data-start-time="{{ current_session.start_time|date:'c' }}">
+              <span class="navbar-brand">
+                  <a href="{% url 'tracker:dashboard' %}">
+                    tick
+                  </a>
+                  <a id="timer" class="muted" data-start-time="{{ current_session.start_time|date:'c' }}" href="{% url 'tracker:session-active' pk=current_session.pk %}">
                     00:00:00
-                  </span>
-                </a>
+                  </a>
+              </span>
               {% else %}
                 <a class="navbar-brand" href="{% url 'tracker:dashboard' %}">tick</a>
               {% endif %}
