@@ -2,7 +2,18 @@
 
 {% block content %}
 
-<h3 class="mb-2">{{ task.name }}</h3>
+<div class="mb-3">
+  <h3 class="mb-1">{{ task.name }}</h3>
+  <div class="small d-flex-align-end gap-1">
+      {% if task.project.active %}
+      <span class="material-symbols-outlined muted icon">folder_open</span>
+      {% else %}
+      <span class="material-symbols-outlined muted icon">inventory_2</span>
+      {% endif %}
+      <a href="{% url 'tracker:project-detail' pk=task.project.pk %}">{{ task.project.name }}</a>
+  </div>
+</div>
+
 <div id="timer" class="timer-clock mb-2" data-start-time="{{ session.start_time|date:'c' }}">00:00:00</div>
 
 {% if session %}

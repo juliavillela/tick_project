@@ -24,7 +24,7 @@ def session_start(request, pk):
     # Display track starting page
     else:
 
-        template = "track.html"
+        template = "tracker/session_track.html"
         context = {
             "task": task
         }
@@ -40,7 +40,7 @@ def session_active(request, pk):
 
         return redirect("tracker:session-review", pk=session.pk)
     else:
-        template = "track.html"
+        template = "tracker/session_track.html"
         context = {
             "task": task,
             "session": session
