@@ -7,6 +7,9 @@
     <section class="mb-3">
         <div class="mb-2">
             <h3 class="mb-1">
+                {% if task.pk == current_session.task.pk %}
+                    <span class="active-icon"></span>
+                {% endif %}
                 {{task.name}}
             </h3>
 
@@ -44,8 +47,8 @@
                         focus
                     </div>
                     <div class="status-data">
-                        <a href="{% url 'tracker:session-start' pk=task.pk %}">
-                            ▶
+                        <a href="{% url 'tracker:session-start' task.pk %}">
+                            <span class="material-symbols-outlined status-data-icon">timer</span>
                         </a>
                     </div>
                 </div>
