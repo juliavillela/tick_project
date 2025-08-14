@@ -28,6 +28,12 @@
                 </span>
             </div>
         </div>
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You didn't work on any projects at this date.
+            </div>
+        </div>
     {% endfor %}
 </section>
 
@@ -49,7 +55,12 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                No focused sessions were recorded at this date.
+            </div>
         </div>
     {% endfor %}
     </div>
