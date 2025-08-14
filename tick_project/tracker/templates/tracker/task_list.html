@@ -15,16 +15,22 @@
     {% empty %}
         <div class="card card-li">
             <div class="small muted">
-                You don't have any pending tasks.
+                You don't have any pending tasks in your active projects.
             </div>
         </div>
     {% endfor %}
 </section>
-<hr>
+
 <section>
     <h3 class="mb-2">done</h3>
-        {% for task in done_tasks %}
-            {% include "partials/_done_task_list_item.html" with task=task %}
-        {% endfor %}
+    {% for task in done_tasks %}
+        {% include "partials/_done_task_list_item.html" with task=task %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You don't have any done tasks in your active projects.
+            </div>
+        </div>
+    {% endfor %}
 </section>
 {% endblock %}

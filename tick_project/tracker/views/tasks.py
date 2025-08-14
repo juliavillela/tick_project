@@ -12,7 +12,7 @@ def task_list(request):
     context["pending_tasks"] = Task.objects.by_user_and_is_active(request.user,is_done=False)
     context["done_tasks"] = Task.objects.by_user_and_is_active(request.user, is_done=True)
 
-    return render(request, "task_list.html", context)
+    return render(request, "tracker/task_list.html", context)
 
 @login_required
 def task_create(request):
@@ -49,7 +49,7 @@ def task_detail(request, pk):
     context["sessions"] = sessions
     context["session_count"] = len(sessions)
 
-    return render(request, "task_detail.html", context)
+    return render(request, "tracker/task_detail.html", context)
 
 @login_required
 def task_update(request, pk):
