@@ -19,7 +19,7 @@ class SessionManager(Manager):
 
     def create_new_session(self, user, task):
         if self.get_active_session(user):
-            raise ValidationError
+            raise ValidationError("Cannot create new session while another session is active")
         session = self.model(task=task)
         session.set_start_time()
         session.save()
