@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Task, Project, Session
 from ..helpers import timedelta_to_dict, current_session_context
-
+from ..services.summaries import group_sessions_by_project, build_annotated_project_summary
 
 def index(request):
     template = "index.html"
@@ -68,20 +68,9 @@ def daily(request, days_ago):
     daily_seconds = sum(session.duration_in_seconds() for session in all_daily_sessions)
 
     # Group sessions by project
-    sessions_by_project = {}
-    for session in all_daily_sessions:
-        project = session.task.project
-        if project not in sessions_by_project:
-            sessions_by_project[project] = []
-        sessions_by_project[project].append(session)
-
+    sessions_by_project = group_sessions_by_project(all_daily_sessions)
     # Build project summaries
-    daily_projects = []
-    for project, project_sessions in sessions_by_project.items():
-        project.daily_seconds = sum(session.duration_in_seconds() for session in project_sessions)
-        project.daily_time_spent_dict = timedelta_to_dict(timedelta(seconds=project.daily_seconds))
-        project.percentage = round(project.daily_seconds/daily_seconds * 100)
-        daily_projects.append(project)
+    daily_projects = build_annotated_project_summary(sessions_by_project, daily_seconds)
 
     context = current_session_context(request)
     context["projects"] = daily_projects
@@ -117,17 +106,13 @@ def weekly(request, weeks_ago):
     
     # Organize sessions by date and by project
     sessions_by_date = {}
-    sessions_by_project = {}
+    sessions_by_project = group_sessions_by_project(all_weekly_sessions)
 
     for session in all_weekly_sessions:
         date = session.start_time.date()
         if date not in sessions_by_date:
             sessions_by_date[date] = []
         sessions_by_date[date].append(session)
-        project = session.task.project
-        if project not in sessions_by_project:
-            sessions_by_project[project] = []
-        sessions_by_project[project].append(session)
 
     # Build daily summaries
     week_days = []
@@ -147,15 +132,7 @@ def weekly(request, weeks_ago):
         })
 
     # Build project summaries
-    weekly_projects = []
-    for project, project_sessions in sessions_by_project.items():
-        project.weekly_seconds = sum(session.duration_in_seconds() for session in project_sessions)
-        project.weekly_time_spent_dict = timedelta_to_dict(timedelta(seconds=project.weekly_seconds))
-        if weekly_seconds > 0:
-            project.percentage = round((project.weekly_seconds/weekly_seconds)*100)
-        else:
-            project.percentage = 0
-        weekly_projects.append(project)
+    weekly_projects = build_annotated_project_summary(sessions_by_project, weekly_seconds)
     
     context = current_session_context(request)
     context.update({

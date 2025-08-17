@@ -18,16 +18,7 @@
 <section class="mb-3">
     <h3 class="mb-2">Projects</h3> 
     {% for project in projects %}
-        <div class="card card-li grid-min-content-auto">
-            <div class="pie-chart" data-percentage={{project.percentage}}>
-            </div>
-            <div>
-                <a href="{% url 'tracker:project-detail' project.pk %}">{{project.name}}</a>
-                <span class="small muted bold">
-                    {{project.daily_time_spent_dict.hours|stringformat:"02d"}}:{{project.daily_time_spent_dict.minutes|stringformat:"02d"}}
-                </span>
-            </div>
-        </div>
+        {% include "tracker/partials/_project_summary_list_item.html" with project=project %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted">
