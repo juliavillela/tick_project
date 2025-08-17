@@ -14,12 +14,13 @@ class RegisterViewTest(TestCase):
             "email": "newuser@example.com",
             "password1": "Strongpassword123",
             "password2": "Strongpassword123",
+            "timezone": "UTC",
         }
     
     def test_register_view_get(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "register.html")
+        self.assertTemplateUsed(response, "users/register.html")
 
     def test_register_view_post_valid_data_creates_user_and_project(self):
         response = self.client.post(self.url, self.valid_user_data)
@@ -52,7 +53,7 @@ class LoginViewTests(TestCase):
     def test_login_view_get(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login.html")
+        self.assertTemplateUsed(response, "users/login.html")
 
     def test_login_view_post_valid_credentials(self):
         response = self.client.post(self.url, {
@@ -76,7 +77,7 @@ class LoginViewTests(TestCase):
 
         # Should stay on login page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "login.html")
+        self.assertTemplateUsed(response, "users/login.html")
 
         # User should not be logged in
         user = get_user(self.client)
@@ -100,7 +101,7 @@ class UpdateEmailViewTests(TestCase):
         self.client.login(email=self.email, password=self.password)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
 
     def test_post_valid_data_updates_email(self):
         new_email = "new@example.com"
@@ -123,7 +124,7 @@ class UpdateEmailViewTests(TestCase):
 
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
         # Form should contain an error message for password field
         self.assertIn("password", response.context["form"].errors)
 
@@ -140,7 +141,7 @@ class UpdateEmailViewTests(TestCase):
 
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
 
         # Form should contain an error message for email field
         self.assertIn("email", response.context["form"].errors)
@@ -167,7 +168,7 @@ class PasswordUpdateViewTests(TestCase):
         self.client.login(email=self.email, password=self.password)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
 
     def test_post_valid_data_updates_password(self):
         self.client.login(email=self.email, password=self.password)
@@ -196,7 +197,7 @@ class PasswordUpdateViewTests(TestCase):
         })
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
         # Form should contain an error message for old_password field
         self.assertIn("old_password", response.context["form"].errors)
 
@@ -209,7 +210,7 @@ class PasswordUpdateViewTests(TestCase):
         })
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
         # Form should contain an error message for new_password2 (password confimation) field
         self.assertIn("new_password2", response.context["form"].errors)
 
@@ -223,7 +224,7 @@ class PasswordUpdateViewTests(TestCase):
         })
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
         # Form should contain an error message for new_password2 field
         self.assertIn("new_password2", response.context["form"].errors)
 
@@ -245,7 +246,7 @@ class UserDeleteViewTests(TestCase):
         self.client.login(email=self.email, password=self.password)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
 
     def test_post_with_valid_data_deletes_user(self):
         self.client.login(email=self.email, password=self.password)
@@ -265,7 +266,7 @@ class UserDeleteViewTests(TestCase):
         })
         # Should stay on form page
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "user_form.html")
+        self.assertTemplateUsed(response, "users/form.html")
         # Form should contain an error message for password field
         self.assertIn("password", response.context["form"].errors)
 
