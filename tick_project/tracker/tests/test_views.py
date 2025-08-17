@@ -35,7 +35,7 @@ class TestTaskListView(AuthenticatedViewMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.url = reverse("tracker:tasks")
-        self.template = "task_list.html"
+        self.template = "tracker/task_list.html"
 
     def test_list_view_get(self):
         pending_task = Task.objects.create(project=self.project, name="Pending task")
@@ -45,7 +45,7 @@ class TestTaskListView(AuthenticatedViewMixin, TestCase):
         context = response.context
 
         self.assertIn(pending_task, context["pending_tasks"])
-        self.assertIn(done_task, context["done_tasks"])
+        self.assertIn(done_task, context["done_today"])
 
 class TestTaskDetailView(AuthenticatedViewMixin, TestCase):
     def setUp(self):
@@ -55,7 +55,7 @@ class TestTaskDetailView(AuthenticatedViewMixin, TestCase):
             name="Test task"
         )
         self.url = reverse("tracker:task-detail", kwargs={"pk": self.task.pk})
-        self.template = "task_detail.html"
+        self.template = "tracker/task_detail.html"
 
     def test_detail_view_context(self):
         session = Session.objects.create(
@@ -71,7 +71,7 @@ class DailyViewTest(AuthenticatedViewMixin, TestCase):
     def setUp(self):
         super().setUp()
         self.url = reverse("tracker:daily", kwargs={"days_ago": 0})
-        self.template = "daily.html"
+        self.template = "tracker/summary_daily.html"
 
         self.task = Task.objects.create(
             project = self.project,
