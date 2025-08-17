@@ -66,4 +66,4 @@ class TaskManager(Manager):
             project__user=user,
             is_done=True,
             done_at__range=(start_datetime, end_datetime)
-        )
+        ).order_by('-done_at')
