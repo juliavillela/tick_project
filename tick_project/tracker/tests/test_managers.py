@@ -64,3 +64,52 @@ class SessionManagerTest(TestCase):
         self.assertIn(today_session, two_days_sessions)
         self.assertIn(yesterday_session, two_days_sessions)
         self.assertEqual(2, len(two_days_sessions))
+
+class TaskManagerTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(email="test@example.com", password="testpass123")
+        self.project = Project.objects.create(user=self.user, name="Test Project")
+
+    def test_by_user_and_is_active(self):
+        inactive_project = Project.objects.create(user=self.user, name="Inactive Project")
+        inactive_project.active = False
+        inactive_project.save()
+
+        inactive_task = Task.objects.create(project=inactive_project, name="Pending inactive Task")
+
+        pending_task = Task.objects.create(project=self.project, name="Pending active Task")
+        done_task = Task.objects.create(project=self.project, name="Done active Task")
+        done_task.is_done = True
+        done_task.save()
+
+        pending_active_tasks = Task.objects.by_user_and_is_active(user=self.user)
+        self.assertIn(pending_task, pending_active_tasks)
+        self.assertEqual(1, len(pending_active_tasks))
+
+        done_active_tasks = Task.objects.by_user_and_is_active(user=self.user, is_done=True)
+        self.assertIn(done_task, done_active_tasks)
+        self.assertEqual(1, len(done_active_tasks))
+
+    def test_by_user_and_done_date_within(self):
+        now = timezone.now()
+        yesterday = now - timedelta(days=1)
+
+        done_today = Task.objects.create(project=self.project, name="Done today")
+        done_today.is_done = True
+        # on save, done_at is set to now if empty
+        done_today.save()
+
+        done_yesterday = Task.objects.create(project=self.project, name="Done yesterday")
+        done_yesterday.is_done = True
+        done_yesterday.done_at = yesterday
+        done_yesterday.save()
+
+        all_done_today = Task.objects.by_user_and_done_date_within(self.user, now.date())
+        self.assertIn(done_today, all_done_today)
+        self.assertEqual(1, len(all_done_today))
+
+        all_done_two_days = Task.objects.by_user_and_done_date_within(self.user, yesterday.date(), extra_days=1)
+        # make sure results are in correct order (descending done at)
+        self.assertEqual(all_done_two_days[0], done_today)
+        self.assertEqual(all_done_two_days[1], done_yesterday)
+        self.assertEqual(2, len(all_done_two_days))
