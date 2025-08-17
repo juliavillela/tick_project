@@ -1,5 +1,7 @@
+from datetime import timedelta
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 from ..models import Task
 from ..forms import TaskForm
@@ -8,10 +10,9 @@ from ..helpers import current_session_context
 @login_required
 def task_list(request):
     context = current_session_context(request)
-
     context["pending_tasks"] = Task.objects.by_user_and_is_active(request.user,is_done=False)
-    context["done_tasks"] = Task.objects.by_user_and_is_active(request.user, is_done=True)
-
+    today = timezone.now().date()
+    context["done_today"] = Task.objects.by_user_and_done_date_within(user=request.user, date=today)
     return render(request, "tracker/task_list.html", context)
 
 @login_required

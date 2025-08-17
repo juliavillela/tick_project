@@ -11,7 +11,7 @@
 <section class="mb-3">
     <h3 class="mb-2">pending</h3>
     {% for task in pending_tasks %}
-        {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session %}
+        {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session include_project=True %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted">
@@ -21,16 +21,17 @@
     {% endfor %}
 </section>
 
-<section>
-    <h3 class="mb-2">done</h3>
-    {% for task in done_tasks %}
-        {% include "tracker/partials/_done_task_list_item.html" with task=task %}
+<section class="mb-3">
+    <h3 class="mb-2">done today</h3>
+    {% for task in done_today %}
+        {% include "tracker/partials/_done_task_list_item.html" with task=task include_project=True %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted">
-                You don't have any done tasks in your active projects.
+                You have not finished any tasks today.
             </div>
         </div>
     {% endfor %}
 </section>
+
 {% endblock %}
