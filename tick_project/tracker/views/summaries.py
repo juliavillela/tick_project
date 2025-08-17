@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from ..models import Task, Project, Session
 from ..helpers import timedelta_to_dict, current_session_context
-from ..services.summaries import group_sessions_by_project, build_annotated_project_summary
+from ..services.summaries import group_sessions_by_project, group_sessions_by_date, build_annotated_project_summary, build_daily_summary
 
 def index(request):
     template = "index.html"
@@ -85,11 +85,12 @@ def daily(request, days_ago):
 
 @login_required
 def weekly(request, weeks_ago):
-    # Define the start date as 7 days ago from today
+    template = "tracker/summary_weekly.html"
+
+    # Calculate start and end date based on weeks_ago
     today = timezone.now().date()
     date_start = today - timedelta(days=(weeks_ago * 7 + 6))
     date_end = today - timedelta(days=(weeks_ago * 7))
-    template = "tracker/summary_weekly.html"
 
     # Fetch all tasks marked as done by the user within the last 6 days (7 total days)
     weekly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, extra_days=6)
@@ -105,31 +106,11 @@ def weekly(request, weeks_ago):
     weekly_seconds = sum(session.duration_in_seconds() for session in all_weekly_sessions)
     
     # Organize sessions by date and by project
-    sessions_by_date = {}
+    sessions_by_date = group_sessions_by_date(all_weekly_sessions)
     sessions_by_project = group_sessions_by_project(all_weekly_sessions)
 
-    for session in all_weekly_sessions:
-        date = session.start_time.date()
-        if date not in sessions_by_date:
-            sessions_by_date[date] = []
-        sessions_by_date[date].append(session)
-
     # Build daily summaries
-    week_days = []
-
-    for day_offset in range(7):
-        date = date_start + timedelta(days=day_offset)
-        daily_sessions = sessions_by_date.get(date)
-        if daily_sessions:
-            total_seconds_spent = sum(session.duration_in_seconds() for session in daily_sessions)
-        else:
-            total_seconds_spent = 0
-
-        week_days.append({
-            "weekday": date.strftime("%A"), # e.g., Monday, Tuesday 
-            "total_seconds_spent": total_seconds_spent,
-            "daily_time_spent_dict": timedelta_to_dict(timedelta(seconds=total_seconds_spent))
-        })
+    week_days = build_daily_summary(sessions_by_date, date_start, date_end, "%A")
 
     # Build project summaries
     weekly_projects = build_annotated_project_summary(sessions_by_project, weekly_seconds)

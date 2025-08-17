@@ -34,7 +34,7 @@
         {% for day in week_days %}
         <div class="mb-1">
             <div>
-                <span class="small">{{day.weekday}}</span>
+                <span class="small">{{day.date_label}}</span>
                 <span class="small muted bold">
                     {{day.daily_time_spent_dict.hours|stringformat:"02d"}}:{{day.daily_time_spent_dict.minutes|stringformat:"02d"}}
                 </span>
