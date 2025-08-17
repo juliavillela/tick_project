@@ -2,7 +2,12 @@
             <div>
             </div>
             <div>
-                <a href="{% url 'tracker:task-detail' task.pk%}">{{task.name}}</a>
+                <a href="{% url 'tracker:task-detail' task.pk%}">
+                    {{task.name}}
+                    {% if include_project %}
+                        {% include "tracker/partials/_project_badge.html" with project=task.project %}
+                    {% endif %}
+                </a>
             </div>
             <div>
                 <span class="small muted bold">
