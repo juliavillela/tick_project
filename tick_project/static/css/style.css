@@ -2,7 +2,7 @@
 :root{
     --bg-color: #FBF9F2;
     --bg-color-accent: #F2F0EA;
-    --bg-color-accent-dark: #dfdcd2;
+    --bg-color-accent-dark: #e4e2dd;
     --text-color: #121212;
     --text-color-muted: #999999;
     --border-radius: 20px;
@@ -288,6 +288,15 @@ input[type="checkbox"]:checked::after {
 
 .focus-button{
     font-size: inherit;
+}
+
+.project-badge{
+    padding: 0rem .6rem 0.1rem 0.6rem;
+    background-color: var(--bg-color-accent-dark);
+    width: fit-content;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
 }
 
 /* ------------ COMPONENTS: WORKFLOW-LIST ------------ */
