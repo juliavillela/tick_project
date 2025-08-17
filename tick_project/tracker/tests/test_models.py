@@ -77,6 +77,30 @@ class TaskModelTests(TestCase):
 
         self.assertEqual(task.total_seconds_spent(), 60)
 
+    def test_save_sets_done_at_if_none(self):
+        task = Task.objects.create(project=self.project, name="Test Task")
+        task.is_done = True
+        task.save()
+
+        task.refresh_from_db()
+        self.assertIsNotNone(task.done_at)
+
+        mins_ago = timezone.now() - timedelta(minutes=30)
+        task.done_at = mins_ago
+        task.save()
+
+        task.refresh_from_db()
+        self.assertEqual(mins_ago, task.done_at)
+
+    def test_save_removes_done_at_if_is_done_is_false(self):
+        task = Task.objects.create(project=self.project, name="Test Task")
+        task.done_at = timezone.now()
+        task.is_done = False
+        task.save()
+        
+        task.refresh_from_db()
+        self.assertIsNone(task.done_at)
+
 class SessionModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(email="test@example.com", password="testpass123")
