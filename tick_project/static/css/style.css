@@ -347,6 +347,25 @@ input[type="checkbox"]:checked::after {
     height: 8px; /* width is set through js script */
 }
 
+.monthly-bars-container{
+    display: grid;
+    flex-direction: column;
+    min-height: 150px;
+}
+
+.bar-label-container{
+    display: flex;
+    align-items: center;
+}
+
+.bar-label-container span{
+    width: 3ch;
+}
+
+.monthly-bars-container .duration-bar{
+    margin-right: 0;
+}
+
 /* ------------ COMPONENTS: TIMER ------------ */
 .timer-clock{
     background-color: var(--bg-color-accent);

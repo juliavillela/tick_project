@@ -28,4 +28,5 @@ urlpatterns = [
 
     path("daily/<int:days_ago>/", views.daily, name="daily"),
     path("weekly/<int:weeks_ago>/", views.weekly, name="weekly"),
+    path("monthly/<int:months_ago>/", views.monthly, name="monthly"),
 ]

@@ -1,4 +1,5 @@
-from datetime import timedelta
+from datetime import timedelta, date
+from calendar import monthrange
 from django.shortcuts import render
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
@@ -126,4 +127,57 @@ def weekly(request, weeks_ago):
         "next": weeks_ago - 1 if weeks_ago > 0 else None
     })
 
+    return render(request, template, context)
+
+def monthly(request, months_ago):
+    template = "tracker/summary_monthly.html"
+
+    # Calculate start and end date based on months_ago
+    today = timezone.now().date()
+
+    year = today.year
+    month = today.month - months_ago
+    
+    while month <= 0:
+        month += 12
+        year -= 1
+
+    month_duration = monthrange(year, month)[1]
+    date_start = date(year, month, 1)
+    date_end = date(year, month, month_duration)
+    
+    # Fetch all tasks marked as done by the user within the last 29 days (30 total days)
+    monthly_tasks = Task.objects.by_user_and_done_date_within(user=request.user, date=date_start, extra_days=month_duration-1)
+    
+    # Fetch all sessions started within month
+    all_monthly_sessions = Session.objects.by_user_and_start_date_within(
+        user=request.user, 
+        date=date_start, 
+        extra_days=month_duration - 1
+        ).select_related("task", "task__project")
+    
+    # Calculate total seconds focused for the month
+    monthly_seconds = sum(session.duration_in_seconds() for session in all_monthly_sessions)
+    
+    # Organize sessions by date and by project
+    sessions_by_date = group_sessions_by_date(all_monthly_sessions)
+    sessions_by_project = group_sessions_by_project(all_monthly_sessions)
+
+    # Build daily summaries
+    month_days = build_daily_summary(sessions_by_date, date_start, date_end, "%d")
+
+    # Build project summaries
+    monthly_projects = build_annotated_project_summary(sessions_by_project, monthly_seconds)
+
+    context = current_session_context(request)
+    context.update({
+        "monthly_time": timedelta_to_dict(timedelta(seconds=monthly_seconds)),
+        "monthly_tasks": len(monthly_tasks),
+        "month_date": f"{date_start.strftime("%B %Y")}",
+        "month_days": month_days,
+        "projects": monthly_projects,
+        "previous": months_ago + 1,
+        "next": months_ago - 1 if months_ago > 0 else None
+    })
+    
     return render(request, template, context)

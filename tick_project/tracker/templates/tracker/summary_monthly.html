@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="mb-3">
+    <h3>Monthly summary</h3>
+</div>
+<div class="mb-2">
+    <a class="small muted link" href="{% url 'tracker:monthly' previous %}">previous</a>
+    {% if next is not None %}
+    | <a class="small muted link" href="{% url 'tracker:monthly' next %}">next</a>
+    {% endif %}
+</div>
+
+<section class="mb-3">
+    {% include "tracker/partials/_summary_card.html" with total_time=monthly_time done_tasks=monthly_tasks title=month_date %}
+</section>
+
+<section class="mb-3">
+    <h3 class="mb-2">Projects</h3> 
+    {% for project in projects %}
+        {% include "tracker/partials/_project_summary_list_item.html" with project=project %}
+    {% empty %}
+        <div class="card card-li">
+            <div class="small muted">
+                You didn't work on any projects this month.
+            </div>
+        </div>
+    {% endfor %}
+</section>
+
+<section class="mb-3">
+    <h3 class="mb-2">Days overview</h3>
+    <div class="card card-li">
+        <div class="monthly-bars-container">
+            {% for day in month_days %}
+            <div class="bar-label-container">
+                <span class="small muted">{{day.date_label}}</span>
+                <div class="duration-bar horizontal" data-duration={{day.total_seconds_spent}}></div>
+            </div>
+            {% endfor %}
+            </div>
+    </div>
+</section>
+
+{% endblock %}
