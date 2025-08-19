@@ -17,3 +17,6 @@ db.sqlite3
 
 # notetaking personal files
 notes/
+
+# environment variables
+.env
