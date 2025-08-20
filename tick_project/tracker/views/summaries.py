@@ -120,7 +120,7 @@ def weekly(request, weeks_ago):
     context.update({
         "weekly_time": timedelta_to_dict(timedelta(seconds=weekly_seconds)),
         "weekly_tasks": len(weekly_tasks),
-        "week_date": f"{date_start.strftime("%A %B %d")} - {date_end.strftime("%B %d")}",
+        "week_date": f"{date_start.strftime('%A %B %d')} - {date_end.strftime('%B %d')}", 
         "week_days": week_days,
         "projects": weekly_projects,
         "previous": weeks_ago + 1,
@@ -173,7 +173,7 @@ def monthly(request, months_ago):
     context.update({
         "monthly_time": timedelta_to_dict(timedelta(seconds=monthly_seconds)),
         "monthly_tasks": len(monthly_tasks),
-        "month_date": f"{date_start.strftime("%B %Y")}",
+        "month_date": f"{date_start.strftime('%B %Y')}",
         "month_days": month_days,
         "projects": monthly_projects,
         "previous": months_ago + 1,
