@@ -13,16 +13,15 @@
 
                     {{task.name}}
                     
-                    {% if include_project %}
-                        {% include "tracker/partials/_project_badge.html" with project=task.project %}
-                    {% endif %}
-
                     {% if task.total_seconds_spent > 0 %}
                         <span class="small muted bold">
                             {{task.total_time_spent_dict.hours|stringformat:"02d"}}:{{task.total_time_spent_dict.minutes|stringformat:"02d"}}
                         </span>
                     {% endif %}
-
+                    
+                    {% if include_project %}
+                        {% include "tracker/partials/_project_badge.html" with project=task.project %}
+                    {% endif %}
                 </a>
             </div>
 
