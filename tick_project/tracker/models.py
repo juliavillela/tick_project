@@ -94,10 +94,3 @@ class Session(models.Model):
     
     def duration_dict(self):
         return timedelta_to_dict(timedelta(seconds=self.duration_in_seconds()))
-    
-        """
-        Returns a float representing the session's duration 
-        normalized to height units (e.g., 1 unit = 25 minutes).
-        Used for visual representation in the UI.
-        """
-        return self.duration_in_seconds()/1500
