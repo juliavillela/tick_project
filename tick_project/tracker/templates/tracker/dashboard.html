@@ -38,8 +38,11 @@
         {% include "tracker/partials/_project_list_item.html" with project=project %}
     {% empty %}
         <div class="card card-li">
-            <div class="small muted">
+            <div class="small muted mb-3">
                 You don't have any active projects.
+            </div>
+            <div class="mb-1">
+               <a href="{% url 'tracker:project-create' %}" class="button button-light"> create project</a>
             </div>
         </div>
     {% endfor %}
