@@ -44,12 +44,20 @@
 
                 <div class="container">
                     <div class="status-title">
-                        focus
+                        {% if task.is_done %}
+                            done
+                        {% else %}
+                            focus
+                        {% endif %}
                     </div>
                     <div class="status-data">
-                        <a href="{% url 'tracker:session-start' task.pk %}">
-                            <span class="material-symbols-outlined status-data-icon">timer</span>
-                        </a>
+                        {% if task.is_done %}
+                            <span class="material-symbols-outlined status-data-icon">check_circle</span>
+                        {% else %}
+                            <a href="{% url 'tracker:session-start' task.pk %}">
+                                <span class="material-symbols-outlined status-data-icon">timer</span>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
