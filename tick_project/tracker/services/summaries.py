@@ -44,7 +44,10 @@ def build_annotated_project_summary(sessions_by_project:dict, total_seconds:int)
     for project, project_sessions in sessions_by_project.items():
         project.total_seconds = sum(session.duration_in_seconds() for session in project_sessions)
         project.time_spent_dict = timedelta_to_dict(timedelta(seconds=project.total_seconds))
-        project.percentage = round(project.total_seconds/total_seconds * 100)
+        if total_seconds > 0:
+            project.percentage = round(project.total_seconds/total_seconds * 100)
+        else:
+            project.percentage = 0
         project_summary.append(project)
     return project_summary
 
