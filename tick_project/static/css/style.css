@@ -39,6 +39,7 @@ a{
 button{
     border-style: none;
     background-color: transparent;
+    cursor: pointer;
 }
 
 /* ------------ UTILS ------------ */
@@ -379,6 +380,7 @@ input[type="checkbox"]:checked::after {
 
 .timer-button{
     font-size: 3rem;
+    cursor: pointer;
 }
 
 /* ------------ COMPONENTS: TOAST MESSAGES ------------ */
