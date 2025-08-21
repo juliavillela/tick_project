@@ -125,11 +125,15 @@ class SessionModelTests(TestCase):
 
 
     def test_duration_in_seconds(self):
-        start = timezone.now() 
-        end = start + timedelta(seconds=30)
+        end = timezone.now()
+        start = end - timedelta(seconds=30)
         session = Session.objects.create(task=self.task, start_time=start, end_time=end)
         self.assertEqual(session.duration_in_seconds(), 30)
-
-        #return 0 if one of the timestamps are missing
+        
+        # return now-start_time if end_time is missing (session is active)
         session.end_time = None
+        self.assertGreater(session.duration_in_seconds(), 30)
+
+        #return 0 if start_time is missing
+        session.start_time = None
         self.assertEqual(session.duration_in_seconds(), 0)

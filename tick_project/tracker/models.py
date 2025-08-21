@@ -87,9 +87,12 @@ class Session(models.Model):
         self.end_time = self.start_time + timedelta(seconds=seconds)
 
     def duration_in_seconds(self):
-        if self.start_time is None or self.end_time is None:
+        if self.start_time is None:
             return 0
-        duration = self.end_time - self.start_time
+        if self.end_time is None: # is currently active session
+            duration = timezone.now() - self.start_time
+        else:
+            duration = self.end_time - self.start_time
         return duration.total_seconds()
     
     def duration_dict(self):
