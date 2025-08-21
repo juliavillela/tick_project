@@ -176,8 +176,8 @@ input[type="checkbox"]{
     appearance: none;       /* Remove default styling */
     -webkit-appearance: none;
     -moz-appearance: none;
-    width: 18px;             /* Size */
-    height: 18px;
+    width: 1.1rem;
+    height: 1.1rem;
     border: 1px solid var(--text-color-muted);
     background-color: var(--bg-color-accent); /* Background */
     cursor: pointer;
@@ -192,12 +192,13 @@ input[type="checkbox"]:checked {
 }
 
 input[type="checkbox"]:checked::after {
-  content: "✕";
-  color: var(--bg-color);
-  font-weight: bold;
-  position: absolute;
-  left: 2px;
-  font-size: 16px;
+    content: "✕";
+    color: var(--bg-color);
+    font-weight: bold;
+    position: absolute;
+    left: .1rem;
+    top: -.03rem;
+    font-size: 1rem;
 }
 
 /* ------------ COMPONENTS: NAVBAR ------------ */
