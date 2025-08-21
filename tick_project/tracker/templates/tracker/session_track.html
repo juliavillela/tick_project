@@ -20,13 +20,17 @@
   <form method="post" class="text-center">
     {% csrf_token %}
     <input type="hidden" name="task_id" value="{{task.id}}">
-    <button class="timer-button" type="submit">⏹</button>
+    <button class="timer-button" type="submit">
+      <span class="material-symbols-outlined timer-button">stop_circle</span>
+    </button>
   </form>
 {% else %}
   <form method="post" class="text-center">
     {% csrf_token %}
     <input type="hidden" name="session_id" value="{{session.id}}">
-    <button class="timer-button" type="submit">▶</button>
+    <button type="submit">
+      <span class="material-symbols-outlined timer-button">play_circle</span>
+    </button>
   </form>
 {% endif %}
 
