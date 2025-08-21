@@ -43,6 +43,8 @@
                         <span class="muted bold">
                             {{session.duration_dict.hours|stringformat:"02d"}}:{{session.duration_dict.minutes|stringformat:"02d"}}
                         </span>
+                        {% include "tracker/partials/_project_badge.html" with project=session.task.project %}
+
                     </div>
                 </div>
             </div>

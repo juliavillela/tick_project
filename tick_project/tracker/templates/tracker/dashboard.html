@@ -17,7 +17,7 @@
     <a class="float-end small" href="{% url 'tracker:tasks' %}">see all</a>
     <h3 class="mb-2">Tasks</h3> 
     {% for task in tasks %}
-        {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session %}
+        {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session include_project=True %}
     {% empty %}
         <div class="card card-li">
             <div class="small muted mb-3">
