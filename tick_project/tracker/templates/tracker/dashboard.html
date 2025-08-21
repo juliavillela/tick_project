@@ -15,7 +15,7 @@
 
 <section class="mb-3">
     <a class="float-end small" href="{% url 'tracker:tasks' %}">see all</a>
-    <h3 class="mb-2">Tasks</h3> 
+    <h3 class="mb-2">Recent tasks</h3> 
     {% for task in tasks %}
         {% include "tracker/partials/_pending_task_list_item.html" with task=task current_session=current_session include_project=True %}
     {% empty %}
@@ -33,7 +33,7 @@
 
 <section>
     <a class="float-end small" href="{% url 'tracker:projects' %}">see all</a>
-    <h3 class="mb-2">Projects</h3> 
+    <h3 class="mb-2">Recent projects</h3> 
     {% for project in projects %}
         {% include "tracker/partials/_project_list_item.html" with project=project %}
     {% empty %}
