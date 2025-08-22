@@ -18,7 +18,7 @@ This is a portfolio project built with Django (backend) and simple templates (fr
 - Python/Django - Backend logic and database operations using Django’s built-in ORM.
 - SQLite — default local database
 - Django templates — minimal frontend
-- HTML, CSS and Javascript
+- HTML, CSS and a little bit of Javascript
 
 ## Installation and usage
 ```bash
@@ -36,6 +36,27 @@ python manage.py runserver
 ```
 Visit `http://127.0.0.1:8000/` to start using Tick.
 
+## Testing
+Tick includes tests covering:
+- Models and Custom Managers
+- All account-related views in `users` app.
+To run the tests locally:
+
+```bash
+cd tick_project
+python manage.py test
+```
+
 ## Screenshots
 ![Dashboard Screenshot](tick_project/static/images/screenshots/dashboard.png)
-![Project-detail Screenshot](tick_project/static/images/screenshots/project-detail.png)
+![Project-detail Screenshot](tick_project/static/images/screenshots/project-detail-horizontal.png)
+![Daily-summary Screenshot](tick_project/static/images/screenshots/daily-summary-horizontal.png)
+
+### About
+
+I built Tick both as a way to practice and showcase my Django skills (models, managers, authentication, views, testing, and deployment) and to solve a personal need.
+
+I wanted a project-based time tracker that was as quiet and minimal as possible — something that helps me focus on work and study without distractions or unnecessary complexity.
+
+I’ve been using Tick non-stop, and it’s been great for giving me feedback on my own work patterns, like when my most productive hours are and how much time I actually spend on tasks (spoiler: usually more than I expect!).
+
