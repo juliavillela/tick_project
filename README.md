@@ -48,15 +48,20 @@ python manage.py test
 ```
 
 ## Screenshots
+Dashboard view :
 ![Dashboard Screenshot](tick_project/static/images/screenshots/dashboard.png)
+
+Project detail view with an active task:
 ![Project-detail Screenshot](tick_project/static/images/screenshots/project-detail-horizontal.png)
+
+Daily summary example:
 ![Daily-summary Screenshot](tick_project/static/images/screenshots/daily-summary-horizontal.png)
 
 ### About
 
 I built Tick both as a way to practice and showcase my Django skills (models, managers, authentication, views, testing, and deployment) and to solve a personal need.
 
-I wanted a project-based time tracker that was as quiet and minimal as possible — something that helps me focus on work and study without distractions or unnecessary complexity.
+I wanted a project-based time tracker that was as quiet and minimal as possible.Something that helps me focus on work and study without distractions or unnecessary complexity.
 
 I’ve been using Tick non-stop, and it’s been great for giving me feedback on my own work patterns, like when my most productive hours are and how much time I actually spend on tasks (spoiler: usually more than I expect!).
 
