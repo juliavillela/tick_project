@@ -1,5 +1,65 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
-<h1>Index</h1>
+<div class="p-1">
+    <section class="mb-3">
+        <p class="mb-1">
+            Tick is a simple, focused time-tracking app designed to help you see where your time goes.
+        </p>
+        <p class="mb-3">
+            <a class="link" href="{% url 'users:register' %}">Create a free account</a> or <a class="link" href={users:login}>login</a> to start using. 
+        </p>
+        <div class="multiple-images-container">
+            <img class="front-image front-image-right" src="{% static 'images/screenshots/daily-summary.png'%}">
+            <img class="back-horizontal-image" src="{% static 'images/screenshots/dashboard.png'%}">
+        </div>
+    </section>
+
+    <section class="mb-3">
+        <h2 class="mb-2">Key features</h2>
+        <ul class="clean-ul">
+            <li class="card card-li">
+                <span> One-click time tracking:</span>
+                <span class="muted"> start a timer on any task to begin a session, stop it when you’re done.</span>
+            </li>
+            <li class="card card-li">
+                <span>Automatic session logging:</span> 
+                <span class="muted">no manual entry required (but you can adjust durations afterward).</span>
+            </li>
+            <li class="card card-li">
+                <span>At-a-glance progress:</span>
+                <span class="muted">always know how much time you’ve already invested in each task and project.</span>
+            </li>
+            <li class="card card-li">
+                <span>Project archiving:</span>
+                <span class="muted">hide old projects from active lists without losing their history.</span>
+            </li>
+            <li class="card card-li">
+                <span>Daily summary:</span>
+                <span class="muted">see what you worked on, how long you spent, and in what order.</span>
+            </li>
+            <li class="card card-li">
+                <span>Weekly and monthly summaries:</span>
+                <span class="muted">view charts of daily focus time and project breakdowns.</span>
+            </li>
+        </ul>
+    </section>
+
+    <section class="mb-3">
+        <h2 class="mb-2">Why use tick</h2>
+        <p class="mb-3">
+            Tick helps you stay aware of your focused work time: project by project, task by task. Start a timer, work without distractions, and review your progress with simple daily, weekly, and monthly summaries.
+        </p>
+        <div class="multiple-images-container">
+            <img class="front-image" src="{% static 'images/screenshots/project-detail.png'%}">
+            <img class="back-image" src="{% static 'images/screenshots/tracker.png'%}">
+        </div>
+    </section>
+    <section>
+        <p class="mb-3">
+            Whether you’re managing personal projects or keeping track of client work, Tick makes it simple to record your time, review your habits, and keep a complete history without cluttering your active workspace.
+        </p>
+    </section>
+</div>
 {% endblock %}

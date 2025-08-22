@@ -403,3 +403,44 @@ div#messages{
 .alert{
     padding: .6rem;
 }
+
+/* ------------ ABOUT PAGE (INDEX) ------------ */
+
+.multiple-images-container{
+    display: flex;
+    contain:content;
+    background-color: var(--bg-color-accent);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.multiple-images-container img{
+    border-radius: 10px;
+    box-shadow: 1px 1px 4px #0000002b;
+}
+
+.multiple-images-container .front-image{
+    width: 50%;
+    position: absolute;
+    z-index: 5;
+    margin-top: 3rem;
+}
+
+.multiple-images-container .front-image.front-image-right{
+    width: 40%;
+    margin-left: 55%;
+}
+
+.multiple-images-container .back-image{
+    width: 50%;
+    margin-left: 50%;
+}
+
+.multiple-images-container .back-horizontal-image{
+    width: 80%;
+}
+
+.clean-ul{
+    margin: 0;
+    padding:0;
+}
