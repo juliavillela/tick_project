@@ -48,18 +48,22 @@
 
     <section class="mb-3">
         <h2 class="mb-2">Why use tick</h2>
-        <p class="mb-3">
+        <p class="mb-1">
             Tick helps you stay aware of your focused work time: project by project, task by task. Start a timer, work without distractions, and review your progress with simple daily, weekly, and monthly summaries.
+        </p>
+        <p class="mb-3">
+            Whether you’re managing personal projects or keeping track of client work, Tick makes it simple to record your time, review your habits, and keep a complete history without cluttering your active workspace.
         </p>
         <div class="multiple-images-container">
             <img class="front-image" src="{% static 'images/screenshots/project-detail.png'%}">
             <img class="back-image" src="{% static 'images/screenshots/tracker.png'%}">
         </div>
     </section>
-    <section>
-        <p class="mb-3">
-            Whether you’re managing personal projects or keeping track of client work, Tick makes it simple to record your time, review your habits, and keep a complete history without cluttering your active workspace.
-        </p>
-    </section>
 </div>
 {% endblock %}
+
+  {% block footer %}
+  <div class="small">
+    ✦ 2025 Tick. Made with love by <a class="link" href="https://github.com/juliavillela">Julia Villela</a>.
+  </div>
+  {% endblock %}
